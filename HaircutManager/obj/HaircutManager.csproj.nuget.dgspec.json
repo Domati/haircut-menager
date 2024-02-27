@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "Z:\\ASP,NET\\HaircutManager\\HaircutManager\\HaircutManager.csproj": {}
+    "Z:\\ASP,NET\\HaircutManager\\HaircutManager.csproj": {}
   },
   "projects": {
-    "Z:\\ASP,NET\\HaircutManager\\HaircutManager\\HaircutManager.csproj": {
+    "Z:\\ASP,NET\\HaircutManager\\HaircutManager.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "Z:\\ASP,NET\\HaircutManager\\HaircutManager\\HaircutManager.csproj",
+        "projectUniqueName": "Z:\\ASP,NET\\HaircutManager\\HaircutManager.csproj",
         "projectName": "HaircutManager",
-        "projectPath": "Z:\\ASP,NET\\HaircutManager\\HaircutManager\\HaircutManager.csproj",
+        "projectPath": "Z:\\ASP,NET\\HaircutManager\\HaircutManager.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "Z:\\ASP,NET\\HaircutManager\\HaircutManager\\obj\\",
+        "outputPath": "Z:\\ASP,NET\\HaircutManager\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\VisualSDK\\NuGetPackages"
@@ -48,6 +48,12 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[8.0.2, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

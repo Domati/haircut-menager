@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HaircutManager")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f98303dc08d31e8f016e3ade05e46578bf65a72f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a88f3ba8243e867e336364815d65f5a7d9485ff5")]
 [assembly: System.Reflection.AssemblyProductAttribute("HaircutManager")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HaircutManager")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
