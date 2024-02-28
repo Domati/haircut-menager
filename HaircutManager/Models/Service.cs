@@ -10,7 +10,7 @@ namespace HaircutManager.Models
         
         [Required]
         [StringLength(100)]
-        public string NameOfService { get; set; } // nazwa usługi
+        public string ServiceName { get; set; } // nazwa usługi
 
         [StringLength(500)]
         public string Description { get; set; } // opis usługi
