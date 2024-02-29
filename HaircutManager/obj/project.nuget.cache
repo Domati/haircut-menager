@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "I+qZuBW2b+GLj9jTjuLYoMy3lmSCVPODdvOSpfZhtl5xd6yIE+IDc2Udi+z6aMEoj2guL2CgNTxC9u/e5sy8rQ==",
+  "dgSpecHash": "d3LAoKVR0SUmtcV5UZage087MOu+BsBzxS5g962WmRmILfeANFXBEddpS7+wZT8gop0T8yq5bN29jCmJi7OqnQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Mateusz\\Source\\Repos\\Domati\\haircut-menager\\HaircutManager\\HaircutManager.csproj",
   "expectedPackageFiles": [
@@ -116,7 +116,7 @@
     "C:\\Users\\Mateusz\\.nuget\\packages\\nuget.projectmodel\\6.3.1\\nuget.projectmodel.6.3.1.nupkg.sha512",
     "C:\\Users\\Mateusz\\.nuget\\packages\\nuget.protocol\\6.3.1\\nuget.protocol.6.3.1.nupkg.sha512",
     "C:\\Users\\Mateusz\\.nuget\\packages\\nuget.versioning\\6.3.1\\nuget.versioning.6.3.1.nupkg.sha512",
-    "C:\\Users\\Mateusz\\.nuget\\packages\\pomelo.entityframeworkcore.mysql\\8.0.0\\pomelo.entityframeworkcore.mysql.8.0.0.nupkg.sha512",
+    "C:\\Users\\Mateusz\\.nuget\\packages\\pomelo.entityframeworkcore.mysql\\8.0.1\\pomelo.entityframeworkcore.mysql.8.0.1.nupkg.sha512",
     "C:\\Users\\Mateusz\\.nuget\\packages\\system.buffers\\4.5.1\\system.buffers.4.5.1.nupkg.sha512",
     "C:\\Users\\Mateusz\\.nuget\\packages\\system.codedom\\5.0.0\\system.codedom.5.0.0.nupkg.sha512",
     "C:\\Users\\Mateusz\\.nuget\\packages\\system.collections.immutable\\7.0.0\\system.collections.immutable.7.0.0.nupkg.sha512",

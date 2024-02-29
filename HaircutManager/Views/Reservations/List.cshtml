@@ -12,6 +12,9 @@
                 @Html.DisplayNameFor(model => model.ReservationDate)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.EstimatedEndTime)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.ClientName)
             </th>
             <th>
@@ -33,6 +36,9 @@
                 @Html.DisplayFor(modelItem => item.ReservationDate)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.EstimatedEndTime)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.ClientName)
             </td>
             <td>
@@ -42,7 +48,7 @@
                 @Html.DisplayFor(modelItem => item.ClientPhoneNumber)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Service.ServiceId)
+                @Html.DisplayFor(modelItem => item.Service.ServiceName)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ReservationId">Edit</a> |

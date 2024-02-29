@@ -1,4 +1,5 @@
 using HaircutManager.Data;
+using HaircutManager.Models;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

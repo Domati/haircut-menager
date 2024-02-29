@@ -17,13 +17,13 @@ build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = HaircutManager
 build_property.RootNamespace = HaircutManager
-build_property.ProjectDir = C:\Users\Mateusz\source\repos\Domati\haircut-menager\HaircutManager\
+build_property.ProjectDir = C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\Mateusz\source\repos\Domati\haircut-menager\HaircutManager
+build_property.MSBuildProjectDirectory = C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager
 build_property._RazorSourceGeneratorDebug = 
 
 [C:/Users/Mateusz/source/repos/Domati/haircut-menager/HaircutManager/Views/Home/Index.cshtml]
@@ -36,6 +36,18 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Mateusz/source/repos/Domati/haircut-menager/HaircutManager/Views/Reservations/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVzZXJ2YXRpb25zXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Mateusz/source/repos/Domati/haircut-menager/HaircutManager/Views/Reservations/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVzZXJ2YXRpb25zXERlbGV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Mateusz/source/repos/Domati/haircut-menager/HaircutManager/Views/Reservations/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVzZXJ2YXRpb25zXERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Mateusz/source/repos/Domati/haircut-menager/HaircutManager/Views/Reservations/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVzZXJ2YXRpb25zXEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Mateusz/source/repos/Domati/haircut-menager/HaircutManager/Views/Reservations/List.cshtml]

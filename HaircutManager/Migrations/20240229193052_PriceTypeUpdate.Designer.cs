@@ -3,7 +3,7 @@ using System;
 using HaircutManager.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,24 +11,22 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HaircutManager.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240229193052_PriceTypeUpdate")]
+    partial class PriceTypeUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
-
             modelBuilder.Entity("HaircutManager.Models.Reservation", b =>
                 {
                     b.Property<int>("ReservationId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("ReservationId"));
 
                     b.Property<string>("ClientEmail")
                         .HasColumnType("longtext");
@@ -38,9 +36,6 @@ namespace HaircutManager.Migrations
 
                     b.Property<string>("ClientPhoneNumber")
                         .HasColumnType("longtext");
-
-                    b.Property<DateTime>("EstimatedEndTime")
-                        .HasColumnType("datetime(6)");
 
                     b.Property<DateTime>("ReservationDate")
                         .HasColumnType("datetime(6)");
@@ -61,65 +56,23 @@ namespace HaircutManager.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("ServiceId"));
-
                     b.Property<int>("AvgTimeOfService")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("ServiceName")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("ServiceId");
 
                     b.ToTable("Services");
-
-                    b.HasData(
-                        new
-                        {
-                            ServiceId = 1,
-                            AvgTimeOfService = 30,
-                            Description = "Krótkie strzyżenie męskie",
-                            Price = 50.00m,
-                            ServiceName = "Strzyżenie męskie"
-                        },
-                        new
-                        {
-                            ServiceId = 2,
-                            AvgTimeOfService = 45,
-                            Description = "Strzyżenie damskie wraz z modelowaniem",
-                            Price = 70.00m,
-                            ServiceName = "Strzyżenie damskie"
-                        },
-                        new
-                        {
-                            ServiceId = 3,
-                            AvgTimeOfService = 75,
-                            Description = "Farbowanie włosów",
-                            Price = 150m,
-                            ServiceName = "Farbowanie"
-                        },
-                        new
-                        {
-                            ServiceId = 4,
-                            AvgTimeOfService = 120,
-                            Description = "Zabieg chemicznego podkręcenia włosów",
-                            Price = 130m,
-                            ServiceName = "Trwała"
-                        },
-                        new
-                        {
-                            ServiceId = 5,
-                            AvgTimeOfService = 150,
-                            Description = "Pasmowe farbowanie włosów",
-                            Price = 200m,
-                            ServiceName = "Pasemka"
-                        });
                 });
 
             modelBuilder.Entity("HaircutManager.Models.Reservation", b =>

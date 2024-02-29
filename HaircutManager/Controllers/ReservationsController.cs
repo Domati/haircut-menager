@@ -19,13 +19,14 @@ namespace HaircutManager.Controllers
         //Wyświetlanie listy rezerwacji 
         public async Task<IActionResult> List()
         {
-            return View(await _context.Reservations.ToListAsync());
+            return View(await _context.Reservations.Include(r => r.Service).ToListAsync());
         }
 
 
         // Wyświetlanie szczegółów rezerwacji
         public async Task<IActionResult> Details(int? id)
         {
+
             if (id == null)
             {
                 return NotFound();
@@ -46,23 +47,29 @@ namespace HaircutManager.Controllers
         public IActionResult Create()
         {
             ViewBag.ServiceId = new SelectList(_context.Services, "ServiceId", "ServiceName");
-            // Tutaj możesz załadować listę usług, jeśli jest potrzebna w formularzu
             return View();
         }
 
         // Tworzenie nowej rezerwacji - POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ReservationId,ReservationName,ReservationDate,ClientName,ClientEmail,ClientPhoneNumber,ServiceId")] Reservation reservation)
+        public async Task<IActionResult> Create([Bind("ReservationId,ReservationDate,ClientName,ClientEmail,ClientPhoneNumber,ServiceId")] Reservation reservation)
         {
             if (ModelState.IsValid)
             {
+                var service = await _context.Services.FindAsync(reservation.ServiceId);
+                if (service != null)
+                {
+                    // Obliczanie przewidywanej godziny zakończenia
+                    reservation.EstimatedEndTime = reservation.ReservationDate.AddMinutes(service.AvgTimeOfService);
+                }
+
                 _context.Add(reservation);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(List));
             }
-            // Tutaj załaduj listę usług, jeśli jest potrzebna w formularzu
-            return View();
+           
+            return View(reservation);
         }
 
 
@@ -70,6 +77,8 @@ namespace HaircutManager.Controllers
         // Edycja rezerwacji - GET
         public async Task<IActionResult> Edit(int? id)
         {
+
+            ViewBag.ServiceId = new SelectList(_context.Services, "ServiceId", "ServiceName");
             if (id == null)
             {
                 return NotFound();

@@ -4,6 +4,7 @@ using HaircutManager.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HaircutManager.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240229195132_BasicDataForServices")]
+    partial class BasicDataForServices
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,9 +41,6 @@ namespace HaircutManager.Migrations
 
                     b.Property<string>("ClientPhoneNumber")
                         .HasColumnType("longtext");
-
-                    b.Property<DateTime>("EstimatedEndTime")
-                        .HasColumnType("datetime(6)");
 
                     b.Property<DateTime>("ReservationDate")
                         .HasColumnType("datetime(6)");
