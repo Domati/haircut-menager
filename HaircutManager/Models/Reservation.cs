@@ -9,8 +9,6 @@ namespace HaircutManager.Models
 
         public int ReservationId { get; set; }
 
-        public string ReservationName { get; set;}
-
         public DateTime ReservationDate { get; set;}
  
         public string ClientName { get; set;}

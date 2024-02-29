@@ -16,13 +16,12 @@ namespace HaircutManager.Controllers
         {
             _context = context;
         }
-
-        // Wyświetlanie listy rezerwacji
-        public async Task<IActionResult> Index()
+        //Wyświetlanie listy rezerwacji 
+        public async Task<IActionResult> List()
         {
-            var reservations = await _context.Reservations.Include(r => r.Service).ToListAsync();
-            return View(reservations);
+            return View(await _context.Reservations.ToListAsync());
         }
+
 
         // Wyświetlanie szczegółów rezerwacji
         public async Task<IActionResult> Details(int? id)

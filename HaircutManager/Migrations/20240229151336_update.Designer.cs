@@ -3,6 +3,7 @@ using System;
 using HaircutManager.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HaircutManager.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240229151336_update")]
+    partial class update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,6 +43,10 @@ namespace HaircutManager.Migrations
                     b.Property<DateTime>("ReservationDate")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("ReservationName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<int>("ServiceId")
                         .HasColumnType("int");
 
@@ -56,9 +63,8 @@ namespace HaircutManager.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("AvgTimeOfService")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<DateTime>("AvgTimeOfService")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
                         .IsRequired()

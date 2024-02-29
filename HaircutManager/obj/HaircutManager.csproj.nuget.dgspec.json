@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "Z:\\ASP,NET\\HaircutManager\\HaircutManager.csproj": {}
+    "C:\\Users\\Mateusz\\Source\\Repos\\Domati\\haircut-menager\\HaircutManager\\HaircutManager.csproj": {}
   },
   "projects": {
-    "Z:\\ASP,NET\\HaircutManager\\HaircutManager.csproj": {
+    "C:\\Users\\Mateusz\\Source\\Repos\\Domati\\haircut-menager\\HaircutManager\\HaircutManager.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "Z:\\ASP,NET\\HaircutManager\\HaircutManager.csproj",
+        "projectUniqueName": "C:\\Users\\Mateusz\\Source\\Repos\\Domati\\haircut-menager\\HaircutManager\\HaircutManager.csproj",
         "projectName": "HaircutManager",
-        "projectPath": "Z:\\ASP,NET\\HaircutManager\\HaircutManager.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "Z:\\ASP,NET\\HaircutManager\\obj\\",
+        "projectPath": "C:\\Users\\Mateusz\\Source\\Repos\\Domati\\haircut-menager\\HaircutManager\\HaircutManager.csproj",
+        "packagesPath": "C:\\Users\\Mateusz\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Mateusz\\Source\\Repos\\Domati\\haircut-menager\\HaircutManager\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "D:\\VisualSDK\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Mateusz\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],

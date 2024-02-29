@@ -14,7 +14,7 @@ namespace HaircutManager.Models
 
         public string Price { get; set; } // cena usługi
 
-        public DateTime AvgTimeOfService { get; set; } // przewidywany czas trwania usługi
+        public string AvgTimeOfService { get; set; } // przewidywany czas trwania usługi
 
         public List<Reservation> Reservations { get; set; } // Relacja: jedna usługa może być przypisana do wielu rezerwacji
 

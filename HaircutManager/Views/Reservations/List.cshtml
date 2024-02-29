@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<HaircutManager.Models.Reservation>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "List";
 }
 <p>
     <a asp-action="Create">Create New</a>
@@ -8,9 +8,6 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ReservationName)
-            </th>
             <th>
                 @Html.DisplayNameFor(model => model.ReservationDate)
             </th>
@@ -32,9 +29,6 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReservationName)
-            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ReservationDate)
             </td>
