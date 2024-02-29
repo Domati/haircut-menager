@@ -9,27 +9,16 @@ namespace HaircutManager.Models
 
         public int ReservationId { get; set; }
 
-        [Required]
-        [StringLength(100)]
         public string ReservationName { get; set;}
 
-        [Required]
-        [DataType(DataType.DateTime)]
         public DateTime ReservationDate { get; set;}
-
-        [Required]
-        [StringLength(100)]
-        public int ClientName { get; set;}
-
-        [DataType(DataType.EmailAddress)]
+ 
+        public string ClientName { get; set;}
+       
         public string ClientEmail { get; set;}
-
-        [DataType(DataType.PhoneNumber)]
+        
         public string ClientPhoneNumber { get; set;}
 
-
-
-        [Required]
         public int ServiceId { get; set; } // Klucz obcy dla Usługi
 
         // Relacja: każda rezerwacja dotyczy jednej usługi

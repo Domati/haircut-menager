@@ -1,7 +1,19 @@
+using HaircutManager.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+//MySQL Connection
+var connectionString = builder.Configuration.GetConnectionString("MySQLConn");
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+}
+);
 
 var app = builder.Build();
 
