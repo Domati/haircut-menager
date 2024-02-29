@@ -40,10 +40,12 @@
             @Html.DisplayFor(model => model.Service.ServiceId)
         </dd>
     </dl>
-    
-    <form asp-action="View">
+
+    <form asp-action="Delete" method="post">
         <input type="hidden" asp-for="ReservationId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="List">Back to List</a>
+        <p>Czy na pewno chcesz usunąć tę rezerwację?</p>
+        <button type="submit" class="btn btn-danger">Usuń</button>
+        <a asp-action="List" class="btn btn-secondary">Anuluj</a>
     </form>
+
 </div>

@@ -68,7 +68,7 @@ namespace HaircutManager.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(List));
             }
-           
+
             return View(reservation);
         }
 
@@ -84,12 +84,21 @@ namespace HaircutManager.Controllers
                 return NotFound();
             }
 
+
+
             var reservation = await _context.Reservations.FindAsync(id);
             if (reservation == null)
             {
                 return NotFound();
             }
-            // Tutaj załaduj listę usług, jeśli jest potrzebna w formularzu
+
+            var service = await _context.Services.FindAsync(reservation.ServiceId);
+            if (service != null)
+            {
+                // Obliczanie przewidywanej godziny zakończenia
+                reservation.EstimatedEndTime = reservation.ReservationDate.AddMinutes(service.AvgTimeOfService);
+            }
+
             return View(reservation);
         }
 
@@ -107,6 +116,13 @@ namespace HaircutManager.Controllers
             {
                 try
                 {
+
+                    var service = await _context.Services.FindAsync(reservation.ServiceId);
+                    if (service != null)
+                    {
+                        reservation.EstimatedEndTime = reservation.ReservationDate.AddMinutes(service.AvgTimeOfService);
+                    }
+
                     _context.Update(reservation);
                     await _context.SaveChangesAsync();
                 }
@@ -121,9 +137,9 @@ namespace HaircutManager.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+
+                return RedirectToAction(nameof(List));
             }
-            // Tutaj załaduj listę usług, jeśli jest potrzebna
             return View(reservation);
         }
 
@@ -132,5 +148,43 @@ namespace HaircutManager.Controllers
         {
             return _context.Reservations.Any(e => e.ReservationId == id);
         }
+
+        // Wyświetlanie potwierdzenia usunięcia rezerwacji - GET
+        public async Task<IActionResult> Delete(int? id)
+        { 
+            
+               
+            if (id == null)
+            {
+                return NotFound();
+            }
+                var reservation = await _context.Reservations
+                .Include(r => r.Service)
+                .FirstOrDefaultAsync(m => m.ReservationId == id);
+           
+            if (reservation == null)
+            {
+                return NotFound();
+            }
+
+            return View(reservation);
+        }
+
+        // Usuwanie rezerwacji - POST
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var reservation = await _context.Reservations.FindAsync(id);
+            if (reservation != null)
+            {
+                _context.Reservations.Remove(reservation);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(List));
+        }
+
+
     }
 }
