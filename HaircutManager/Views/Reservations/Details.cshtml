@@ -1,5 +1,7 @@
 ﻿@model HaircutManager.Models.Reservation
-
+@{
+    ViewData["Title"] = "Details";
+}
 <div>
     <h4>Reservation</h4>
     <hr />
@@ -38,5 +40,13 @@
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.ReservationId">Edit</a> |
-    <a asp-action="List">Back to List</a>
+    @if (TempData["PreviousUrl"] != null && TempData["PreviousUrl"].ToString().Contains("Calendar"))
+    {
+        <a href="@Url.Action("Index", "Calendar")">Back to Calendar</a>
+    }
+    else
+    {
+        <a href="@Url.Action("List", "Reservations")">Back to List</a>
+    }
+
 </div>

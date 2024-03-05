@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Mateusz\\Source\\Repos\\Domati\\haircut-menager\\HaircutManager\\HaircutManager.csproj": {}
+    "C:\\Users\\Admin\\Source\\Repos\\haircut-menager\\HaircutManager\\HaircutManager.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Mateusz\\Source\\Repos\\Domati\\haircut-menager\\HaircutManager\\HaircutManager.csproj": {
+    "C:\\Users\\Admin\\Source\\Repos\\haircut-menager\\HaircutManager\\HaircutManager.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Mateusz\\Source\\Repos\\Domati\\haircut-menager\\HaircutManager\\HaircutManager.csproj",
+        "projectUniqueName": "C:\\Users\\Admin\\Source\\Repos\\haircut-menager\\HaircutManager\\HaircutManager.csproj",
         "projectName": "HaircutManager",
-        "projectPath": "C:\\Users\\Mateusz\\Source\\Repos\\Domati\\haircut-menager\\HaircutManager\\HaircutManager.csproj",
-        "packagesPath": "C:\\Users\\Mateusz\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Mateusz\\Source\\Repos\\Domati\\haircut-menager\\HaircutManager\\obj\\",
+        "projectPath": "C:\\Users\\Admin\\Source\\Repos\\haircut-menager\\HaircutManager\\HaircutManager.csproj",
+        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Admin\\Source\\Repos\\haircut-menager\\HaircutManager\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "D:\\VisualSDK\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Mateusz\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -49,6 +49,14 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "FullCalendar.MVC5": {
+              "target": "Package",
+              "version": "[1.0.6, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.2, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[8.0.2, )"
@@ -74,6 +82,10 @@
             "Pomelo.EntityFrameworkCore.MySql": {
               "target": "Package",
               "version": "[8.0.1, )"
+            },
+            "fullcalendar": {
+              "target": "Package",
+              "version": "[3.9.0, )"
             }
           },
           "imports": [

@@ -26,6 +26,8 @@ namespace HaircutManager.Controllers
         // Wyświetlanie szczegółów rezerwacji
         public async Task<IActionResult> Details(int? id)
         {
+            TempData["PreviousUrl"] = HttpContext.Request.GetTypedHeaders().Referer?.ToString();
+            var previousUrl = TempData["PreviousUrl"] as string;
 
             if (id == null)
             {
@@ -185,6 +187,23 @@ namespace HaircutManager.Controllers
             return RedirectToAction(nameof(List));
         }
 
+        //Przesylanie rezerwacji do kalendarza
+
+        [HttpGet]
+        public async Task<IActionResult> GetEvents()
+        {
+            var reservations = await _context.Reservations.Include(r => r.Service).Select(r => new
+                {
+                    id = r.ReservationId,
+                    title = r.ClientName,
+                    service = r.Service.ServiceName,
+                    start = r.ReservationDate, 
+                    end = r.EstimatedEndTime,
+                })
+                .ToListAsync();
+
+            return Json(reservations);
+        }
 
     }
 }
