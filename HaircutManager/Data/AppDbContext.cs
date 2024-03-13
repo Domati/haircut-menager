@@ -1,9 +1,11 @@
 ﻿using HaircutManager.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace HaircutManager.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -12,7 +14,7 @@ namespace HaircutManager.Data
 
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<Service> Services { get; set; }
-
+  
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -26,5 +28,9 @@ namespace HaircutManager.Data
                     new Service {ServiceId =  5,ServiceName = "Pasemka", Description = "Pasmowe farbowanie włosów", Price = 200, AvgTimeOfService = 150 }
                 );
         }
+
+    
+                }
+
     }
-}
+

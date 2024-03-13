@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Admin\\Source\\Repos\\haircut-menager\\HaircutManager\\HaircutManager.csproj": {}
+    "C:\\Users\\Admin\\source\\repos\\haircut-menager\\HaircutManager\\HaircutManager.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Admin\\Source\\Repos\\haircut-menager\\HaircutManager\\HaircutManager.csproj": {
+    "C:\\Users\\Admin\\source\\repos\\haircut-menager\\HaircutManager\\HaircutManager.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Admin\\Source\\Repos\\haircut-menager\\HaircutManager\\HaircutManager.csproj",
+        "projectUniqueName": "C:\\Users\\Admin\\source\\repos\\haircut-menager\\HaircutManager\\HaircutManager.csproj",
         "projectName": "HaircutManager",
-        "projectPath": "C:\\Users\\Admin\\Source\\Repos\\haircut-menager\\HaircutManager\\HaircutManager.csproj",
+        "projectPath": "C:\\Users\\Admin\\source\\repos\\haircut-menager\\HaircutManager\\HaircutManager.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Admin\\Source\\Repos\\haircut-menager\\HaircutManager\\obj\\",
+        "outputPath": "C:\\Users\\Admin\\source\\repos\\haircut-menager\\HaircutManager\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\VisualSDK\\NuGetPackages"
@@ -57,7 +57,19 @@
               "target": "Package",
               "version": "[8.0.2, )"
             },
+            "Microsoft.AspNetCore.Identity.UI": {
+              "target": "Package",
+              "version": "[8.0.2, )"
+            },
             "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.2, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[8.0.2, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
               "target": "Package",
               "version": "[8.0.2, )"
             },
