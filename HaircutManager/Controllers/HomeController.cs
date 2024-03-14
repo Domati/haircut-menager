@@ -1,20 +1,25 @@
+using AuthSystem.Areas.Identity.Data;
 using HaircutManager.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace HaircutManager.Controllers
-{
+{ 
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger,UserManager<ApplicationUser> userManager)
         {
             _logger = logger;
+            this._userManager = userManager;
         }
 
         public IActionResult Index()
         {
+             ViewData["User"]=_userManager.GetUserId(this.User);
             return View();
         }
 
