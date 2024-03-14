@@ -10,6 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+
+builder.Services.Configure<IdentityOptions>(options => options.Password.RequireUppercase = false);
+
 //MySQL Connection
 var connectionString = builder.Configuration.GetConnectionString("MySQLConn");
 
@@ -19,7 +22,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 }
 );
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<AppDbContext>();
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<AppDbContext>();
 
 var app = builder.Build();
 
