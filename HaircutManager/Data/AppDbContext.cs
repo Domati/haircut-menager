@@ -14,6 +14,7 @@ namespace HaircutManager.Data
 
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<Service> Services { get; set; }
+        public DbSet<ApplicationUser> ApplicationUser { get; set; }
   
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -1,11 +1,9 @@
-using AuthSystem.Areas.Identity.Data;
 using HaircutManager.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace HaircutManager.Controllers
-{ 
+{
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
