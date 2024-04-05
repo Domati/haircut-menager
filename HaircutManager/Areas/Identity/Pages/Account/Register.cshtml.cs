@@ -83,7 +83,7 @@ namespace HaircutManager.Areas.Identity.Pages.Account
             [Display(Name = "Email")]
             public string Email { get; set; }
 
-            [Required]         
+
             public string Role { get; set; }
 
             [ValidateNever]
@@ -146,21 +146,13 @@ namespace HaircutManager.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-
-                    //if(User.IsInRole("Admin"))
+                    var isAdmin = User.IsInRole("Admin");
                     
-                    // Dodaj użytkownika do domyślnej roli "Klienci"
                     var addRoleResult = await _userManager.AddToRoleAsync(user, "Klienci");
                     if (!addRoleResult.Succeeded)
                     {
                         _logger.LogError("Nie udało się dodać użytkownika do roli 'Klienci'.");
-                        // Tutaj możesz obsłużyć błąd, np. dodać wiadomość do ModelState
-                        // i zwrócić użytkownika do formularza z odpowiednim komunikatem o błędzie
                     }
-
-                    await _userManager.AddToRoleAsync(user, Input.Role);
-                    
-
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -180,7 +172,15 @@ namespace HaircutManager.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        if(!isAdmin)
+                        {
+                            await _signInManager.SignInAsync(user, isPersistent: false);
+                        }
+                        else
+                        {
+                            returnUrl = Url.Content("~/Users/Index");
+                        }
+                        
                         return LocalRedirect(returnUrl);
                     }
                 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using HaircutManager.Data;
 
 namespace HaircutManager.Controllers
 {
@@ -13,6 +14,9 @@ namespace HaircutManager.Controllers
         {
             _roleManager = roleManager;
         }
+
+        
+
         //Lista wszystkich ról
         public IActionResult Index()
         {

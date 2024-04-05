@@ -1,0 +1,31 @@
+﻿@using Microsoft.AspNetCore.Identity
+@{
+    ViewData["Title"] = "User Management";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (dynamic user in ViewBag.Users)
+        {
+            <tr>
+                <td>@user.Email</td>
+                <td>@user.Role</td>
+                <td>
+                    @foreach (var role in ViewBag.Roles as IEnumerable<IdentityRole>)
+                    {
+                        <a asp-action="Edit" asp-route-id="@user.Id" asp-route-roleName="@role.Name" class="btn btn-primary">@role.Name</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
