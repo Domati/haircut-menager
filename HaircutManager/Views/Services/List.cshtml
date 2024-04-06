@@ -2,26 +2,29 @@
 @{
     ViewData["Title"] = "List";
 }
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+            @if (User.IsInRole("Admin") || User.IsInRole("Fryzjer"))
+            {
+                <p>
+                    <a asp-action="Create">Create New</a>
+                </p>
+            }
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ServiceId)
+             Numer
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ServiceName)
+             Nazwa
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+             Opis
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
+             Cena
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AvgTimeOfService)
+             Średni czas wykonania
             </th>
         </tr>
     </thead>
@@ -44,11 +47,13 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.AvgTimeOfService)
                 </td>
-
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.ServiceId">Edit</a> |
+                @if (User.IsInRole("Admin") || User.IsInRole("Fryzjer"))
+                {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.ServiceId">Edit</a> |
                     <a asp-action="Delete" asp-route-id="@item.ServiceId">Delete</a>
                 </td>
+                }
             </tr>
         }
     </tbody>

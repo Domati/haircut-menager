@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HaircutManager.Controllers
 {
@@ -16,6 +18,7 @@ namespace HaircutManager.Controllers
         {
             _context = context;
         }
+        [Authorize]
         //Wyświetlanie listy rezerwacji 
         public async Task<IActionResult> List()
         {
@@ -24,6 +27,7 @@ namespace HaircutManager.Controllers
 
 
         // Wyświetlanie szczegółów rezerwacji
+        [Authorize(Roles = "Admin,Fryzjer")]
         public async Task<IActionResult> Details(int? id)
         {
             TempData["PreviousUrl"] = HttpContext.Request.GetTypedHeaders().Referer?.ToString();
@@ -75,7 +79,7 @@ namespace HaircutManager.Controllers
         }
 
 
-
+        [Authorize(Roles = "Admin,Fryzjer")]
         // Edycja rezerwacji - GET
         public async Task<IActionResult> Edit(int? id)
         {
@@ -105,6 +109,7 @@ namespace HaircutManager.Controllers
         }
 
         // Edycja rezerwacji - POST
+        [Authorize(Roles = "Admin,Fryzjer")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ReservationId,ReservationName,ReservationDate,ClientName,ClientEmail,ClientPhoneNumber,ServiceId")] Reservation reservation)
@@ -152,6 +157,7 @@ namespace HaircutManager.Controllers
         }
 
         // Wyświetlanie potwierdzenia usunięcia rezerwacji - GET
+        [Authorize(Roles = "Admin,Fryzjer")]
         public async Task<IActionResult> Delete(int? id)
         { 
             
@@ -174,6 +180,7 @@ namespace HaircutManager.Controllers
 
         // Usuwanie rezerwacji - POST
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin,Fryzjer")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

@@ -3,28 +3,34 @@
     ViewData["Title"] = "List";
 }
 <p>
-    <a asp-action="Create">Create New</a>
+    <div style="text-align: center; margin-bottom: 25px">
+        <a class="btn btn-primary" asp-controller="Reservations" asp-action="Create">Utwórz rezerwację</a>
+    </div>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ReservationDate)
+             Godzina Rezerwacji
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EstimatedEndTime)
+             Przewidywany czas Zakończenia
+            </th>
+            
+            <th>
+             Klient
+            </th>
+            @if (User.IsInRole("Admin") || User.IsInRole("Fryzjer"))
+            {
+            <th>
+             E-Mail
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ClientName)
+             Numer telefonu
             </th>
+            }
             <th>
-                @Html.DisplayNameFor(model => model.ClientEmail)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ClientPhoneNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Service)
+             Usługa
             </th>
             <th></th>
         </tr>
@@ -41,21 +47,32 @@
             <td>
                 @Html.DisplayFor(modelItem => item.ClientName)
             </td>
+                @if (User.IsInRole("Admin") || User.IsInRole("Fryzjer"))
+                { 
             <td>
                 @Html.DisplayFor(modelItem => item.ClientEmail)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ClientPhoneNumber)
             </td>
+                }
             <td>
                 @Html.DisplayFor(modelItem => item.Service.ServiceName)
             </td>
+                @if (User.IsInRole("Admin") || User.IsInRole("Fryzjer"))
+                {
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ReservationId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.ReservationId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.ReservationId">Delete</a>
             </td>
+                }
         </tr>
 }
     </tbody>
 </table>
+
+<div style="text-align: center; margin-bottom: 15px">
+    <h4>W razie pomyłki w rezewacji proszę o kontakt telefoniczny</h4>
+</div>
+

@@ -1,5 +1,6 @@
 ﻿using HaircutManager.Data;
 using HaircutManager.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -22,7 +23,7 @@ namespace HaircutManager.Controllers
             return View(await _context.Services.ToListAsync());
         }
 
-
+        [Authorize(Roles = "Admin,Fryzjer")]
         // GET: Services/Create
         public IActionResult Create()
         {
@@ -31,6 +32,7 @@ namespace HaircutManager.Controllers
 
         // POST: Services/Create
         [HttpPost]
+        [Authorize(Roles = "Admin,Fryzjer")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ServiceName,Description,Price,AvgTimeOfService")] Service service)
         {
@@ -45,6 +47,7 @@ namespace HaircutManager.Controllers
 
 
         // GET: Services/Edit/5
+        [Authorize(Roles = "Admin,Fryzjer")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -62,6 +65,7 @@ namespace HaircutManager.Controllers
 
         // POST: Services/Edit/5
         [HttpPost]
+        [Authorize(Roles = "Admin,Fryzjer")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ServiceId,ServiceName,Description,Price,AvgTimeOfService")] Service service)
         {
@@ -95,6 +99,7 @@ namespace HaircutManager.Controllers
 
 
         // GET: Services/Delete/5
+        [Authorize(Roles = "Admin,Fryzjer")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -114,6 +119,7 @@ namespace HaircutManager.Controllers
 
 
         // POST: Services/Delete/5
+        [Authorize(Roles = "Admin,Fryzjer")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)

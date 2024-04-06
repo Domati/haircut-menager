@@ -25,9 +25,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Calendar" asp-action="Index">Kalendarz</a>
                         </li>
+                        @if (User.IsInRole("Klienci") || User.IsInRole("Admin") ||User.IsInRole("Fryzjer") )
+                        {
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Reservations" asp-action="List">Rezerwacje</a>
                         </li>
+                        }
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Services" asp-action="List">Usługi</a>
                         </li>
