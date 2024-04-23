@@ -1,36 +1,32 @@
 ﻿using HaircutManager.Data;
 using HaircutManager.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace HaircutManager.Controllers
 {
     public class ServicesController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IServiceRepository _serviceRepository;
 
-        public ServicesController(AppDbContext context)
+        public ServicesController(IServiceRepository serviceRepository)
         {
-            _context = context;
+            _serviceRepository = serviceRepository;
         }
-        //Wyświetlanie listy rezerwacji 
+
+        // Wyświetlanie listy usług
         public async Task<IActionResult> List()
         {
-            return View(await _context.Services.ToListAsync());
+            return View(await _serviceRepository.ListAsync());
         }
 
         [Authorize(Roles = "Admin,Fryzjer")]
-        // GET: Services/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Services/Create
         [HttpPost]
         [Authorize(Roles = "Admin,Fryzjer")]
         [ValidateAntiForgeryToken]
@@ -38,15 +34,12 @@ namespace HaircutManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(service);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(List)); 
+                await _serviceRepository.AddAsync(service);
+                return RedirectToAction(nameof(List));
             }
             return View(service);
         }
 
-
-        // GET: Services/Edit/5
         [Authorize(Roles = "Admin,Fryzjer")]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -55,7 +48,7 @@ namespace HaircutManager.Controllers
                 return NotFound();
             }
 
-            var service = await _context.Services.FindAsync(id);
+            var service = await _serviceRepository.FindByIdAsync(id.Value);
             if (service == null)
             {
                 return NotFound();
@@ -63,7 +56,6 @@ namespace HaircutManager.Controllers
             return View(service);
         }
 
-        // POST: Services/Edit/5
         [HttpPost]
         [Authorize(Roles = "Admin,Fryzjer")]
         [ValidateAntiForgeryToken]
@@ -76,29 +68,16 @@ namespace HaircutManager.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                if (!_serviceRepository.Exists(service.ServiceId))
                 {
-                    _context.Update(service);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ServiceExists(service.ServiceId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(List)); 
+                await _serviceRepository.UpdateAsync(service);
+                return RedirectToAction(nameof(List));
             }
             return View(service);
         }
 
-
-        // GET: Services/Delete/5
         [Authorize(Roles = "Admin,Fryzjer")]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -107,8 +86,7 @@ namespace HaircutManager.Controllers
                 return NotFound();
             }
 
-            var service = await _context.Services
-                .FirstOrDefaultAsync(m => m.ServiceId == id);
+            var service = await _serviceRepository.FindByIdAsync(id.Value);
             if (service == null)
             {
                 return NotFound();
@@ -117,25 +95,17 @@ namespace HaircutManager.Controllers
             return View(service);
         }
 
-
-        // POST: Services/Delete/5
-        [Authorize(Roles = "Admin,Fryzjer")]
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin,Fryzjer")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var service = await _context.Services.FindAsync(id);
+            var service = await _serviceRepository.FindByIdAsync(id);
             if (service != null)
             {
-                _context.Services.Remove(service);
-                await _context.SaveChangesAsync();
+                await _serviceRepository.DeleteAsync(service);
             }
             return RedirectToAction(nameof(List));
-        }
-
-            private bool ServiceExists(int id)
-        {
-            return _context.Services.Any(e => e.ServiceId == id);
         }
     }
 }

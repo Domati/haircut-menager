@@ -1,8 +1,6 @@
 using HaircutManager.Data;
-using HaircutManager.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+
+builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
+builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 
 builder.Services.Configure<IdentityOptions>(options => options.Password.RequireUppercase = false);
 

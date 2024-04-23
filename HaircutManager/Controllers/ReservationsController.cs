@@ -7,28 +7,36 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using NuGet.Protocol.Core.Types;
 
 namespace HaircutManager.Controllers
 {
     public class ReservationsController : Controller
     {
-        private readonly AppDbContext _context;
 
-        public ReservationsController(AppDbContext context)
+
+        private readonly IReservationRepository _reservationRepository;
+        private readonly IServiceRepository _serviceRepository;
+
+        public ReservationsController(IReservationRepository reservationRepository, IServiceRepository serviceRepository)
         {
-            _context = context;
+            _reservationRepository = reservationRepository;
+            _serviceRepository = serviceRepository;
         }
+
+
+
         [Authorize]
         //Wyświetlanie listy rezerwacji 
         public async Task<IActionResult> List()
         {
-            return View(await _context.Reservations.Include(r => r.Service).ToListAsync());
+            return View( await _reservationRepository.GetAllReservations());
         }
 
 
         // Wyświetlanie szczegółów rezerwacji
         [Authorize(Roles = "Admin,Fryzjer")]
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
             TempData["PreviousUrl"] = HttpContext.Request.GetTypedHeaders().Referer?.ToString();
             var previousUrl = TempData["PreviousUrl"] as string;
@@ -38,9 +46,8 @@ namespace HaircutManager.Controllers
                 return NotFound();
             }
 
-            var reservation = await _context.Reservations
-                .Include(r => r.Service)
-                .FirstOrDefaultAsync(m => m.ReservationId == id);
+            var reservation =  await _reservationRepository.GetReservationById(id);
+
             if (reservation == null)
             {
                 return NotFound();
@@ -50,9 +57,14 @@ namespace HaircutManager.Controllers
         }
 
         // Tworzenie nowej rezerwacji - GET
-        public IActionResult Create()
+        public async Task<IActionResult> CreateAsync()
         {
-            ViewBag.ServiceId = new SelectList(_context.Services, "ServiceId", "ServiceName");
+
+            var serviceItems = await _reservationRepository.GetServicesAsSelectListItems();
+
+
+            ViewBag.ServiceId = new SelectList(serviceItems, "Value", "Text");
+
             return View();
         }
 
@@ -63,15 +75,14 @@ namespace HaircutManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                var service = await _context.Services.FindAsync(reservation.ServiceId);
+                var service = await _serviceRepository.FindByIdAsync(reservation.ServiceId);
                 if (service != null)
                 {
                     // Obliczanie przewidywanej godziny zakończenia
                     reservation.EstimatedEndTime = reservation.ReservationDate.AddMinutes(service.AvgTimeOfService);
                 }
 
-                _context.Add(reservation);
-                await _context.SaveChangesAsync();
+                await _reservationRepository.CreateReservation(reservation);
                 return RedirectToAction(nameof(List));
             }
 
@@ -81,24 +92,25 @@ namespace HaircutManager.Controllers
 
         [Authorize(Roles = "Admin,Fryzjer")]
         // Edycja rezerwacji - GET
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
 
-            ViewBag.ServiceId = new SelectList(_context.Services, "ServiceId", "ServiceName");
+            var serviceItems = await _reservationRepository.GetServicesAsSelectListItems();
+
+            ViewBag.ServiceId = new SelectList(serviceItems, "Value", "Text");
             if (id == null)
             {
                 return NotFound();
             }
 
-
-
-            var reservation = await _context.Reservations.FindAsync(id);
+            var reservation = await _reservationRepository.GetReservationById(id);
             if (reservation == null)
             {
                 return NotFound();
             }
 
-            var service = await _context.Services.FindAsync(reservation.ServiceId);
+            var service = await _serviceRepository.FindByIdAsync(reservation.ServiceId);
+
             if (service != null)
             {
                 // Obliczanie przewidywanej godziny zakończenia
@@ -124,18 +136,17 @@ namespace HaircutManager.Controllers
                 try
                 {
 
-                    var service = await _context.Services.FindAsync(reservation.ServiceId);
+                    var service = await _serviceRepository.FindByIdAsync(reservation.ServiceId);
                     if (service != null)
                     {
                         reservation.EstimatedEndTime = reservation.ReservationDate.AddMinutes(service.AvgTimeOfService);
                     }
 
-                    _context.Update(reservation);
-                    await _context.SaveChangesAsync();
+                    await _reservationRepository.UpdateReservation(reservation);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ReservationExists(reservation.ReservationId))
+                    if (!await _reservationRepository.ReservationExists(reservation.ReservationId))
                     {
                         return NotFound();
                     }
@@ -150,30 +161,19 @@ namespace HaircutManager.Controllers
             return View(reservation);
         }
 
-        // Pomocnicza metoda do sprawdzania, czy rezerwacja istnieje
-        private bool ReservationExists(int id)
-        {
-            return _context.Reservations.Any(e => e.ReservationId == id);
-        }
+
 
         // Wyświetlanie potwierdzenia usunięcia rezerwacji - GET
         [Authorize(Roles = "Admin,Fryzjer")]
-        public async Task<IActionResult> Delete(int? id)
-        { 
-            
-               
+        public async Task<IActionResult> Delete(int id)
+        {
+
+
             if (id == null)
             {
                 return NotFound();
             }
-                var reservation = await _context.Reservations
-                .Include(r => r.Service)
-                .FirstOrDefaultAsync(m => m.ReservationId == id);
-           
-            if (reservation == null)
-            {
-                return NotFound();
-            }
+            var reservation = await _reservationRepository.GetReservationById(id);
 
             return View(reservation);
         }
@@ -184,30 +184,33 @@ namespace HaircutManager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var reservation = await _context.Reservations.FindAsync(id);
-            if (reservation != null)
-            {
-                _context.Reservations.Remove(reservation);
-                await _context.SaveChangesAsync();
-            }
+            await _reservationRepository.DeleteReservation(id);
 
             return RedirectToAction(nameof(List));
         }
 
         //Przesylanie rezerwacji do kalendarza
 
+        //[HttpGet]
+        //public async Task<IActionResult> GetEvents()
+        //{
+        //    var reservations = await _context.Reservations.Include(r => r.Service).Select(r => new
+        //        {
+        //            id = r.ReservationId,
+        //            title = r.ClientName,
+        //            service = r.Service.ServiceName,
+        //            start = r.ReservationDate, 
+        //            end = r.EstimatedEndTime,
+        //        })
+        //        .ToListAsync();
+
+        //    return Json(reservations);
+        //}
+
         [HttpGet]
         public async Task<IActionResult> GetEvents()
         {
-            var reservations = await _context.Reservations.Include(r => r.Service).Select(r => new
-                {
-                    id = r.ReservationId,
-                    title = r.ClientName,
-                    service = r.Service.ServiceName,
-                    start = r.ReservationDate, 
-                    end = r.EstimatedEndTime,
-                })
-                .ToListAsync();
+            var reservations = await _reservationRepository.GetReservationEvents();
 
             return Json(reservations);
         }
