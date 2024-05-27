@@ -8,9 +8,9 @@ namespace HaircutManager.Models
     {
         public int ServiceId { get; set; }
         
-        public string? ServiceName { get; set; } // nazwa usługi
+        public string ServiceName { get; set; } // nazwa usługi
 
-        public string? Description { get; set; } // opis usługi
+        public string Description { get; set; } // opis usługi
 
         public Decimal Price { get; set; } // cena usługi
 

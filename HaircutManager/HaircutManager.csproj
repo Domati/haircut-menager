@@ -24,4 +24,13 @@
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\images\logoFryzjer %28Niestandardowe%29.png" />
+    <None Include="wwwroot\images\logoFryzjer.png" />
+  </ItemGroup>
+
 </Project>

@@ -6,11 +6,12 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
-builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
+
 
 builder.Services.Configure<IdentityOptions>(options => options.Password.RequireUppercase = false);
 

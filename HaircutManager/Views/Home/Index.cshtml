@@ -1,8 +1,32 @@
-﻿@model HaircutManager.Models.Reservation
+﻿@model IEnumerable<HaircutManager.Models.Service>
 @{
     ViewData["Title"] = "Create Reservation";
 }
+<section class="hero">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 d-flex flex-column justify-content-center">
+                <img src="~/images/blonde-girl-getting-her-hair-done.jpg" class="img-fluid" />
+            </div>
+            <div class="col-md-6 d-flex flex-column justify-content-center">
+                <p style="color: black;">Witaj w naszym zakładzie fryzjerskim, miejscu, gdzie twoje włosy stają się twoją wizytówką! Nasz doświadczony zespół fryzjerów to mistrzowie w sztuce tworzenia nowoczesnych, stylowych fryzur, które podkreślą Twoją indywidualność i sprawią, że poczujesz się pewnie każdego dnia. Zanurz się w przyjaznej atmosferze, gdzie luksusowe zabiegi pielęgnacyjne idą w parze z osobistym podejściem do każdego klienta. W naszym salonie nie tylko odświeżysz swój wygląd, ale także odnajdziesz chwilę relaksu i odnowy. Połączenie pasji, kreatywności i najnowszych trendów czeka na Ciebie! Przekrocz próg i pozwól nam sprawić, że każdy dzień będzie dla Ciebie dniem dobrego włosowego humoru!</p>
+            </div>
+        </div>
+    </div>
+</section>
 
-<div class="text-center">
-    <h1 class="display-4">Zakład fryzjerski - Rezerwacja</h1>
-</div>
+<section class="services">
+    <div class="container">
+        <h2><b>Nasze usługi</b></h2>
+        <div class="service-list">
+            @foreach (var item in Model)
+            {
+                <div class="service-item">
+                    <h3>@Html.DisplayFor(modelItem => item.ServiceName)</h3>
+                    <p>@Html.DisplayFor(modelItem => item.Description)</p>
+                    <h5 class="service-price">@Html.DisplayFor(modelItem => item.Price) ZŁ</h5>
+                </div>
+            }
+        </div>
+    </div>
+</section>

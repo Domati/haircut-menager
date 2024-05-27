@@ -7,18 +7,18 @@ namespace HaircutManager.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        
+        private readonly IServiceRepository _serviceRepository;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IServiceRepository serviceRepository)
         {
             _logger = logger;
-            
+            _serviceRepository = serviceRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
-            
-            return View();
+            var services = await _serviceRepository.ListAsync();
+            return View(services);
         }
 
         public IActionResult Contact()

@@ -13,6 +13,18 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "C:\\Users\\Admin\\source\\repos\\haircut-menager\\HaircutManager\\wwwroot\\images\\blonde-girl-getting-her-hair-done.jpg",
+      "PackagePath": "staticwebassets\\images\\blonde-girl-getting-her-hair-done.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Admin\\source\\repos\\haircut-menager\\HaircutManager\\wwwroot\\images\\logoFryzjer (Niestandardowe).png",
+      "PackagePath": "staticwebassets\\images\\logoFryzjer (Niestandardowe).png"
+    },
+    {
+      "Id": "C:\\Users\\Admin\\source\\repos\\haircut-menager\\HaircutManager\\wwwroot\\images\\logoFryzjer.png",
+      "PackagePath": "staticwebassets\\images\\logoFryzjer.png"
+    },
+    {
       "Id": "C:\\Users\\Admin\\source\\repos\\haircut-menager\\HaircutManager\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },
