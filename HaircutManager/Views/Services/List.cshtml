@@ -2,59 +2,50 @@
 @{
     ViewData["Title"] = "List";
 }
-            @if (User.IsInRole("Admin") || User.IsInRole("Fryzjer"))
-            {
-                <p>
-                    <a asp-action="Create">Create New</a>
-                </p>
-            }
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-             Numer
-            </th>
-            <th>
-             Nazwa
-            </th>
-            <th>
-             Opis
-            </th>
-            <th>
-             Cena
-            </th>
-            <th>
-             Średni czas wykonania
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ServiceId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ServiceName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AvgTimeOfService)
-                </td>
-                @if (User.IsInRole("Admin") || User.IsInRole("Fryzjer"))
+<div class="container reservation-list">
+    <h2>Lista Usług</h2>
+
+    @if (User.IsInRole("Admin") || User.IsInRole("Fryzjer"))
+    {
+        <p class="text-center mb-4">
+            <a class="btn btn-primary" asp-action="Create">Stwórz nową usługę</a>
+        </p>
+    }
+
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th class="text-center">Numer</th>
+                    <th class="text-center">Nazwa</th>
+                    <th class="text-center">Opis</th>
+                    <th class="text-center">Cena</th>
+                    <th class="text-center">Średni czas wykonania</th>
+                    @if (User.IsInRole("Admin") || User.IsInRole("Fryzjer"))
+                    {
+                        <th>Akcje</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
                 {
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.ServiceId">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ServiceId">Delete</a>
-                </td>
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.ServiceId)</td>
+                        <td>@Html.DisplayFor(modelItem => item.ServiceName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                        <td>@Html.DisplayFor(modelItem => item.AvgTimeOfService)</td>
+                        @if (User.IsInRole("Admin") || User.IsInRole("Fryzjer"))
+                        {
+                            <td>
+                                <a class="btn btn-sm btn-secondary" asp-action="Edit" asp-route-id="@item.ServiceId">Edytuj</a>
+                                <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.ServiceId">Usuń</a>
+                            </td>
+                        }
+                    </tr>
                 }
-            </tr>
-        }
-    </tbody>
-</table>
+            </tbody>
+        </table>
+    </div>
+</div>

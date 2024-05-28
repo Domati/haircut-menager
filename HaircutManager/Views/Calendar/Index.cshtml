@@ -3,44 +3,40 @@
     ViewData["Title"] = "Kalendarz";
 }
 
-<style>
-    #calendar {
-        max-width:50 px;
-        margin: 0 auto; 
-        padding: 20px; 
+<div class="auth-message">
+    @if (User.Identity.IsAuthenticated)
+    {
+        <a class="btn btn-primary" asp-controller="Reservations" asp-action="Create">Utwórz rezerwację</a>
     }
-</style>
-
-        @if (User.Identity.IsAuthenticated) {
-<div style="text-align: center; margin-bottom: 15px">
-    <a class="btn btn-primary" asp-controller="Reservations" asp-action="Create">Utwórz rezerwację</a>
-    </div>
-}else
-{
-    <div style="text-align: center; margin-bottom: 15px">
-        <h4>Aby się zapisać, <a id="login" asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Context.Request.Path">Zaloguj się</a></h4>
+    else
+    {
+        <h4>
+            Aby się zapisać,
+            <a id="login" class="login-button" asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Context.Request.Path">
+                zaloguj się
+            </a>
+        </h4>
+    }
 </div>
-}
-<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
-            height: 650,
+            height: 750, // Wydłużenie kalendarza
             initialView: 'timeGridWeek',
             locale: 'pl',
             slotDuration: '00:15:00', // Ustawia sloty na 15 minut
-            slotLabelInterval: '00:15:00', 
+            slotLabelInterval: '00:15:00',
             slotMinTime: '10:00:00',
             slotMaxTime: '19:30:00',
             allDaySlot: false,
-
             slotLabelFormat: {
                 hour: '2-digit', // Format godziny (np. "02", "13")
                 minute: '2-digit', // Format minuty (np. "00", "30")
                 hour12: false // Użyj formatu 24-godzinnego
             },
-
             headerToolbar: {
                 left: 'prev,next today',
                 center: 'title',
@@ -52,13 +48,10 @@
                 week: 'Tydzień',
                 day: 'Dzień'
             },
-            
             eventClick: function (info) {
                 window.location.href = '/Reservations/Details/' + info.event.id;
             },
-
             eventSources: [
-                
                 {
                     url: '/Reservations/GetEvents',
                     method: 'GET',
@@ -67,11 +60,10 @@
                     },
                 }
             ]
-
-
         });
 
         calendar.render();
     });
 </script>
-<div id='calendar'></div>
+
+<div id="calendar"></div>

@@ -12,14 +12,25 @@
     <p><strong>Godziny otwarcia:</strong> Poniedziałek - Piątek: 8:00 - 19:00</p>
 </div>
 
+<div id="map"></div>
 
-
-<style>
-    .contact-info, .contact-form {
-        margin-bottom: 20px;
+<script>
+    function initMap() {
+        
+        var uluru = { lat: 49.81520441867893, lng:19.017076612451703 }; // Współrzędne dla ul. Modna 5, Warszawa
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 16, // Poziom przybliżenia mapy
+            center: uluru // Centralny punkt mapy
+        });
+        var marker = new google.maps.Marker({
+            position: uluru,
+            map: map,
+            title: 'Zakład Fryzjerski "Twój Styl"' // Tekst wyświetlany po najechaniu na znacznik
+        });
     }
+</script>
 
-        .contact-info h3, .contact-form h3 {
-            margin-bottom: 15px;
-        }
-</style>
+<!-- Wczytanie skryptu API Google Maps z kluczem API -->
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVUZOazDaX8ONOX8yStP4N2rnChLRcMww&callback=initMap">
+</script>
