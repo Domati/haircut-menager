@@ -181,7 +181,7 @@ namespace HaircutManager.Areas.Identity.Pages.Account
                             returnUrl = Url.Content("~/Users/Index");
                         }
                         
-                        return LocalRedirect(ReturnUrl);
+                        return LocalRedirect(returnUrl);
                     }
                 }
                 foreach (var error in result.Errors)
