@@ -285,7 +285,6 @@ C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\ne
 C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\Microsoft.VisualStudio.Web.CodeGeneration.Templating.dll
 C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\Microsoft.VisualStudio.Web.CodeGeneration.Utils.dll
 C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\Microsoft.VisualStudio.Web.CodeGenerators.Mvc.dll
-C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\Microsoft.Win32.SystemEvents.dll
 C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\Mono.TextTemplating.dll
 C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\MySql.Data.dll
 C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\MySqlConnector.dll
@@ -307,7 +306,6 @@ C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\ne
 C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\System.Composition.Runtime.dll
 C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\System.Composition.TypedParts.dll
 C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\System.Configuration.ConfigurationManager.dll
-C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\System.Drawing.Common.dll
 C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\System.Reflection.MetadataLoadContext.dll
 C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\System.Security.Permissions.dll
@@ -452,15 +450,11 @@ C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\ne
 C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
-C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\runtimes\win\lib\net7.0\Microsoft.Win32.SystemEvents.dll
 C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\runtimes\win-x64\native\comerr64.dll
 C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\runtimes\win-x64\native\gssapi64.dll
 C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\runtimes\win-x64\native\k5sprt64.dll
 C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\runtimes\win-x64\native\krb5_64.dll
 C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\runtimes\win-x64\native\krbcc64.dll
-C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Drawing.Common.dll
-C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Security.Cryptography.ProtectedData.dll
-C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Windows.Extensions.dll
 C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\obj\Debug\net8.0\HaircutManager.csproj.AssemblyReference.cache
 C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\obj\Debug\net8.0\HaircutManager.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\obj\Debug\net8.0\HaircutManager.AssemblyInfoInputs.cache
@@ -1169,4 +1163,12 @@ C:\Users\Mateusz Domagalski\source\repos\haircut-menager\HaircutManager\obj\Debu
 C:\Users\Mateusz Domagalski\source\repos\haircut-menager\HaircutManager\obj\Debug\net8.0\HaircutManager.pdb
 C:\Users\Mateusz Domagalski\source\repos\haircut-menager\HaircutManager\obj\Debug\net8.0\HaircutManager.genruntimeconfig.cache
 C:\Users\Mateusz Domagalski\source\repos\haircut-menager\HaircutManager\obj\Debug\net8.0\ref\HaircutManager.dll
+C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\System.Formats.Asn1.dll
+C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\Microsoft.Extensions.Caching.Memory.dll
+C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\Microsoft.Extensions.Logging.dll
+C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\System.Diagnostics.DiagnosticSource.dll
 C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\System.Text.Json.dll
+C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Windows.Extensions.dll

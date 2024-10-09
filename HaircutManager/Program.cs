@@ -30,11 +30,13 @@ builder.Services
         options.SignIn.RequireConfirmedAccount = false;
         options.Password.RequireDigit = true;
         options.Password.RequiredLength = 12;
-        options.Password.RequireNonAlphanumeric = true; // wymaga znaku specjalnego
+        options.Password.RequireNonAlphanumeric = true;
         options.Password.RequireUppercase = false;
     })
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>();
+
+
 
 var app = builder.Build();
 
