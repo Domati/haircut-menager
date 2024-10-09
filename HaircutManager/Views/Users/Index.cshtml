@@ -5,7 +5,12 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<table class="table">
+<!-- Dodaj przycisk do tworzenia nowego użytkownika -->
+<div>
+    <a asp-action="Create" class="btn btn-success">Create User</a>
+</div>
+
+<table class="table mt-3">
     <thead>
         <tr>
             <th>Email</th>
@@ -24,7 +29,9 @@
                     {
                         <a asp-action="Edit" asp-route-id="@user.Id" asp-route-roleName="@role.Name" class="btn btn-primary">@role.Name</a>
                     }
+                    <a asp-action="ChangePassword" asp-route-id="@user.Id" class="btn btn-warning">Change Password</a>
                 </td>
+
             </tr>
         }
     </tbody>

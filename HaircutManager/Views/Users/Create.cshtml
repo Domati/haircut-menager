@@ -1,0 +1,31 @@
+﻿@model CreateUserViewModel
+
+@{
+    ViewBag.Title = "Create User";
+}
+
+<h2>Create User</h2>
+
+<form asp-action="Create" method="post">
+    <div>
+        <label asp-for="Email"></label>
+        <input asp-for="Email" />
+        <span asp-validation-for="Email" class="text-danger"></span> <!-- Wyświetlanie błędów walidacji -->
+    </div>
+    <div>
+        <label asp-for="Password"></label>
+        <input asp-for="Password" type="password" />
+        <span asp-validation-for="Password" class="text-danger"></span> <!-- Wyświetlanie błędów walidacji -->
+    </div>
+    <div>
+        <label asp-for="RoleName"></label>
+        <select asp-for="RoleName" asp-items="@(new SelectList(ViewBag.Roles, "Name", "Name"))"></select>
+    </div>
+    <button type="submit">Create</button>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    } <!-- Dodanie skryptów walidacji -->
+}

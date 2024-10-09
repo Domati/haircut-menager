@@ -25,7 +25,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 );
 
 builder.Services
-    .AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddDefaultIdentity<IdentityUser>(options =>
+    {
+        options.SignIn.RequireConfirmedAccount = false;
+        options.Password.RequireDigit = true;
+        options.Password.RequiredLength = 12;
+        options.Password.RequireNonAlphanumeric = true; // wymaga znaku specjalnego
+        options.Password.RequireUppercase = false;
+    })
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>();
 

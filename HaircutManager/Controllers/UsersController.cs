@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using HaircutManager.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -50,6 +51,105 @@ public class UsersController : Controller
 
         return RedirectToAction(nameof(Index));
     }
+    //TWORZENIE NOWYCH UŻYTKOWNIKÓW
+    [HttpGet]
+    public IActionResult Create()
+    {
+        ViewBag.Roles = _roleManager.Roles.ToList();
+        return View(new CreateUserViewModel());
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(CreateUserViewModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            var user = new IdentityUser { Email = model.Email, UserName = model.Email };
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (result.Succeeded)
+            {
+                if (!string.IsNullOrEmpty(model.RoleName))
+                {
+                    await _userManager.AddToRoleAsync(user, model.RoleName);
+                }
+                return RedirectToAction(nameof(Index));
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+        }
+
+        ViewBag.Roles = _roleManager.Roles.ToList();
+        return View(model);
+    }
+
+
+    //zmiana hasła użytkowników
+    // Metoda GET
+    public async Task<IActionResult> ChangePassword(string id)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        return View(new ChangePasswordViewModel { UserId = user.Id });
+    }
+
+    // Metoda POST
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+    {
+        var user = await _userManager.FindByIdAsync(model.UserId);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        var isOldPasswordValid = await _userManager.CheckPasswordAsync(user, model.OldPassword);
+        if (!isOldPasswordValid)
+        {
+            ModelState.AddModelError(string.Empty, "Stare hasło jest niepoprawne.");
+            return View(model);
+        }
+
+        var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+        if (result.Succeeded)
+        {
+            return RedirectToAction(nameof(Index));
+        }
+
+        foreach (var error in result.Errors)
+        {
+            ModelState.AddModelError(string.Empty, error.Description);
+        }
+
+        return View(model);
+    }
+
+    //USUWANIE UŻYTKOWNIKów
+    public async Task<IActionResult> Delete(string id)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        if (user != null)
+        {
+            await _userManager.DeleteAsync(user);
+        }
+        return RedirectToAction(nameof(Index));
+    }
+
+
+
+
+
 }
 
 
+//Spróbować zmienić default identity na identity.
+//Dodane zostały - tworzenie, Edycja hasła użytkowników, usuwanie użytkowników przez Admina

@@ -1169,3 +1169,4 @@ C:\Users\Mateusz Domagalski\source\repos\haircut-menager\HaircutManager\obj\Debu
 C:\Users\Mateusz Domagalski\source\repos\haircut-menager\HaircutManager\obj\Debug\net8.0\HaircutManager.pdb
 C:\Users\Mateusz Domagalski\source\repos\haircut-menager\HaircutManager\obj\Debug\net8.0\HaircutManager.genruntimeconfig.cache
 C:\Users\Mateusz Domagalski\source\repos\haircut-menager\HaircutManager\obj\Debug\net8.0\ref\HaircutManager.dll
+C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\System.Text.Json.dll
