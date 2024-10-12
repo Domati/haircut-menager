@@ -70,7 +70,7 @@ public class UsersController : Controller
 
             if (result.Succeeded)
             {
-                if (!string.IsNullOrEmpty(model.RoleName))
+                _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("NeedPasswordChange", "true")).Wait();
                 {
                     await _userManager.AddToRoleAsync(user, model.RoleName);
                 }

@@ -112,6 +112,11 @@ namespace HaircutManager.Areas.Identity.Pages.Account
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                //add check if user needs to change password and redirect to change password page
+                if (User.Claims.Any(c => c.Type == "NeedPasswordChange") && result.Succeeded)
+                {
+                    return RedirectToPage("./Manage/ChangePassword");
+                }
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
