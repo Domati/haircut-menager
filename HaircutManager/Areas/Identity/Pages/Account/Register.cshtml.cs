@@ -175,7 +175,7 @@ namespace HaircutManager.Areas.Identity.Pages.Account
                     {
                         if(!isAdmin)
                         {
-                            await _signInManager.SignInAsync(user, isPersistent: false);
+                            //await _signInManager.SignInAsync(user, isPersistent: false);
                         }
                         else
                         {
