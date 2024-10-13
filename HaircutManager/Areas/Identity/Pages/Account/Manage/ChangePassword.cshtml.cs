@@ -121,15 +121,6 @@ namespace HaircutManager.Areas.Identity.Pages.Account.Manage
             _logger.LogInformation("User changed their password successfully.");
             StatusMessage = "Your password has been changed.";
 
-            //remove NeedPasswordChange claim
-            User.Claims.ToList().ForEach(c =>
-            {
-                if (c.Type == "NeedPasswordChange")
-                {
-                    _userManager.RemoveClaimAsync(user, c);
-                }
-            });
-
             return RedirectToPage();
         }
     }

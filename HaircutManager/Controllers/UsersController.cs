@@ -119,17 +119,19 @@ public class UsersController : Controller
             return View(model);
         }
 
-        var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
-        if (result.Succeeded)
-        {
-            return RedirectToAction(nameof(Index));
-        }
+            var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
 
-        foreach (var error in result.Errors)
-        {
-            ModelState.AddModelError(string.Empty, error.Description);
-        }
+            if (result.Succeeded)
+            {
+                return RedirectToAction(nameof(Index));
+            }
 
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+        
         return View(model);
     }
 
