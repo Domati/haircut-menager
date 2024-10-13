@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HaircutManager.Data
 {
-    public class AppDbContext : IdentityDbContext
+    public class AppDbContext : IdentityDbContext <ApplicationUser>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -15,7 +15,8 @@ namespace HaircutManager.Data
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
-  
+        public DbSet<OldPassword> OldPasswords { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

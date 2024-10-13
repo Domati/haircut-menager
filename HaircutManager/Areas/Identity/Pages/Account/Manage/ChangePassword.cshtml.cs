@@ -4,7 +4,9 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using HaircutManager.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -14,13 +16,13 @@ namespace HaircutManager.Areas.Identity.Pages.Account.Manage
 {
     public class ChangePasswordModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<ChangePasswordModel> _logger;
 
         public ChangePasswordModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
             ILogger<ChangePasswordModel> logger)
         {
             _userManager = userManager;
@@ -107,8 +109,32 @@ namespace HaircutManager.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
+            if(user.PasswordHistory == null)
+            {
+                user.PasswordHistory = new List<OldPassword>();
+            }
+
+            if (user.PasswordHistory.Any(p => p.PasswordHash == _userManager.PasswordHasher.HashPassword(user, Input.NewPassword)))
+            {
+                ModelState.AddModelError(string.Empty, "Password already used.");
+                StatusMessage = "Password already used.";
+                return Page();
+            }
+        
             var changePasswordResult = await _userManager.ChangePasswordAsync(user, Input.OldPassword, Input.NewPassword);
-            if (!changePasswordResult.Succeeded)
+            if (changePasswordResult.Succeeded) {
+                user.PasswordHistory.Add(new OldPassword
+                {
+                    id = Guid.NewGuid(),
+                    PasswordHash = _userManager.PasswordHasher.HashPassword(user, Input.NewPassword),
+                    ChangedAt = DateTime.Now,
+                    UserId = user.Id,
+                    User = user
+                });
+
+                await _userManager.UpdateAsync(user);
+            }
+            else
             {
                 foreach (var error in changePasswordResult.Errors)
                 {
@@ -116,10 +142,14 @@ namespace HaircutManager.Areas.Identity.Pages.Account.Manage
                 }
                 return Page();
             }
+           
 
             await _signInManager.RefreshSignInAsync(user);
             _logger.LogInformation("User changed their password successfully.");
             StatusMessage = "Your password has been changed.";
+
+            //remove claim
+            await _userManager.RemoveClaimAsync(user, new Claim("NeedPasswordChange", "true"));
 
             return RedirectToPage();
         }
