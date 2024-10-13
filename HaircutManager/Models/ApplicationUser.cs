@@ -8,7 +8,7 @@ namespace HaircutManager.Models
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public ICollection<OldPassword> PasswordHistory { get; set; }
+        public List<OldPassword> PasswordHistory { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {

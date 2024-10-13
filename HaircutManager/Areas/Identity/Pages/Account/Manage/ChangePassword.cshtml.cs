@@ -10,6 +10,7 @@ using HaircutManager.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace HaircutManager.Areas.Identity.Pages.Account.Manage
@@ -103,7 +104,9 @@ namespace HaircutManager.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
-            var user = await _userManager.GetUserAsync(User);
+            var user = await _userManager.Users
+                                        .Include(u => u.PasswordHistory)
+                                        .FirstOrDefaultAsync(u => u.Id == _userManager.GetUserId(User));
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
@@ -114,7 +117,9 @@ namespace HaircutManager.Areas.Identity.Pages.Account.Manage
                 user.PasswordHistory = new List<OldPassword>();
             }
 
-            if (user.PasswordHistory.Any(p => p.PasswordHash == _userManager.PasswordHasher.HashPassword(user, Input.NewPassword)))
+            var hash = _userManager.PasswordHasher.HashPassword(user, Input.NewPassword);
+
+            if (user.PasswordHistory.Any(p => p.PasswordHash == hash))
             {
                 ModelState.AddModelError(string.Empty, "Password already used.");
                 StatusMessage = "Password already used.";
@@ -123,14 +128,16 @@ namespace HaircutManager.Areas.Identity.Pages.Account.Manage
         
             var changePasswordResult = await _userManager.ChangePasswordAsync(user, Input.OldPassword, Input.NewPassword);
             if (changePasswordResult.Succeeded) {
-                user.PasswordHistory.Add(new OldPassword
+                var newoldpassword = new OldPassword
                 {
                     id = Guid.NewGuid(),
-                    PasswordHash = _userManager.PasswordHasher.HashPassword(user, Input.NewPassword),
+                    PasswordHash = hash,
                     ChangedAt = DateTime.Now,
                     UserId = user.Id,
                     User = user
-                });
+                };
+
+                user.PasswordHistory.Add(newoldpassword);
 
                 await _userManager.UpdateAsync(user);
             }

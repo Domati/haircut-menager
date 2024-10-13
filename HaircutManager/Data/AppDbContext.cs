@@ -29,6 +29,14 @@ namespace HaircutManager.Data
                     new Service {ServiceId =  4,ServiceName = "Trwała", Description = "Zabieg chemicznego podkręcenia włosów", Price = 130, AvgTimeOfService = 120 },
                     new Service {ServiceId =  5,ServiceName = "Pasemka", Description = "Pasmowe farbowanie włosów", Price = 200, AvgTimeOfService = 150 }
                 );
+
+            modelBuilder.Entity<OldPassword>()
+                .HasKey(op => new { op.id, op.UserId });
+
+            modelBuilder.Entity<OldPassword>()
+                .HasOne(op => op.User)
+                .WithMany(u => u.PasswordHistory)
+                .HasForeignKey(op => op.UserId);
         }
 
     
