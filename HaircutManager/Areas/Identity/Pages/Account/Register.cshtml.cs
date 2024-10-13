@@ -145,6 +145,7 @@ namespace HaircutManager.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
+                    _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("NeedPasswordChange", "true")).Wait();
                     _logger.LogInformation("User created a new account with password.");
                     var isAdmin = User.IsInRole("Admin");
                     
