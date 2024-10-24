@@ -117,7 +117,7 @@ namespace HaircutManager.Areas.Identity.Pages.Account.Manage
                 user.PasswordHistory = new List<OldPassword>();
             }
 
-            var hash = _userManager.PasswordHasher.HashPassword(user, Input.NewPassword);
+            var hash = _userManager.PasswordHasher.HashPassword(await _userManager.Users.FirstOrDefaultAsync(u => u.Id == _userManager.GetUserId(User)), Input.NewPassword);
 
             if (user.PasswordHistory.Any(p => p.PasswordHash == hash))
             {
