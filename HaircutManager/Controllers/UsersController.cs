@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 [Authorize(Roles = "Admin")]
 public class UsersController : Controller
 {
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
 
-    public UsersController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+    public UsersController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
     {
         _userManager = userManager;
         _roleManager = roleManager;
@@ -65,12 +65,12 @@ public class UsersController : Controller
     {
         if (ModelState.IsValid)
         {
-            var user = new IdentityUser { Email = model.Email, UserName = model.Email };
+            var user = new ApplicationUser { Email = model.Email, UserName = model.Email };
             var result = await _userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)
             {
-                if (!string.IsNullOrEmpty(model.RoleName))
+                _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("NeedPasswordChange", "true")).Wait();
                 {
                     await _userManager.AddToRoleAsync(user, model.RoleName);
                 }
@@ -119,18 +119,40 @@ public class UsersController : Controller
             return View(model);
         }
 
-        var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
-        if (result.Succeeded)
+        if (user.PasswordHistory.Any(u => u.PasswordHash == _userManager.PasswordHasher.HashPassword(user, model.NewPassword)))
         {
-            return RedirectToAction(nameof(Index));
+            ModelState.AddModelError(string.Empty, "Hasło już było użyte.");
+            return View(model);
         }
+        else {
 
-        foreach (var error in result.Errors)
-        {
-            ModelState.AddModelError(string.Empty, error.Description);
+            var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+
+            if (result.Succeeded)
+            {
+                if (user.PasswordHistory == null)
+                {
+                    user.PasswordHistory = new List<OldPassword>();
+                }
+
+                user.PasswordHistory.Add(new OldPassword
+                {
+                    PasswordHash = _userManager.PasswordHasher.HashPassword(user, model.NewPassword),
+                    ChangedAt = DateTime.Now
+                });
+
+                await _userManager.UpdateAsync(user);
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            return View(model);
         }
-
-        return View(model);
     }
 
     //USUWANIE UŻYTKOWNIKów

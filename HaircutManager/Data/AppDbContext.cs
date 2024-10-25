@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HaircutManager.Data
 {
-    public class AppDbContext : IdentityDbContext
+    public class AppDbContext : IdentityDbContext <ApplicationUser>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -15,7 +15,8 @@ namespace HaircutManager.Data
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
-  
+        public DbSet<OldPassword> OldPasswords { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,6 +29,14 @@ namespace HaircutManager.Data
                     new Service {ServiceId =  4,ServiceName = "Trwała", Description = "Zabieg chemicznego podkręcenia włosów", Price = 130, AvgTimeOfService = 120 },
                     new Service {ServiceId =  5,ServiceName = "Pasemka", Description = "Pasmowe farbowanie włosów", Price = 200, AvgTimeOfService = 150 }
                 );
+
+            modelBuilder.Entity<OldPassword>()
+                .HasKey(op => new { op.id, op.UserId });
+
+            modelBuilder.Entity<OldPassword>()
+                .HasOne(op => op.User)
+                .WithMany(u => u.PasswordHistory)
+                .HasForeignKey(op => op.UserId);
         }
 
     
