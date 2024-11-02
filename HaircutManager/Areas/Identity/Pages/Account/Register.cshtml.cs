@@ -160,16 +160,7 @@ namespace HaircutManager.Areas.Identity.Pages.Account
                         _logger.LogError("Nie udało się dodać użytkownika do roli 'Klienci'.");
                     }
 
-                    user.PasswordHistory = new List<OldPassword>()
-                    {
-                        new OldPassword
-                        {
-                            PasswordHash = user.PasswordHash,
-                            ChangedAt = DateTime.Now,
-                            UserId = user.Id,
-                            User = user
-                        } 
-                    };
+                    user.PasswordHistory = new List<OldPassword>();
 
                     await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("NeedPasswordChange", "true"));
 
