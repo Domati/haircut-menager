@@ -117,7 +117,8 @@ namespace HaircutManager.Areas.Identity.Pages.Account.Manage
                 user.PasswordHistory = new List<OldPassword>();
             }
 
-            if (user.PasswordHistory.Any(p => _userManager.PasswordHasher.VerifyHashedPassword(user, p.PasswordHash, Input.NewPassword) == PasswordVerificationResult.Success))
+            if (user.PasswordHistory.Any(p => _userManager.PasswordHasher
+            .VerifyHashedPassword(user, p.PasswordHash, Input.NewPassword) == PasswordVerificationResult.Success))
             {
                 ModelState.AddModelError(string.Empty, "Password already used.");
                 StatusMessage = "Password already used.";

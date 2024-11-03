@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 [Authorize(Roles = "Admin")]
@@ -166,9 +167,27 @@ public class UsersController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    //BLOKOWANIE UŻYTKOWNIKÓW
+    public async Task<IActionResult> BanUser(string id)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        if (user != null)
+        {
+            await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.MaxValue);
+        }
+        return RedirectToAction(nameof(Index));
+    }
 
-
-
+    //ODBLOKOWYWANIE UŻYTKOWNIKÓW
+    public async Task<IActionResult> UnbanUser(string id)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        if (user != null)
+        {
+            await _userManager.SetLockoutEndDateAsync(user, null);
+        }
+        return RedirectToAction(nameof(Index));
+    }
 
 }
 
