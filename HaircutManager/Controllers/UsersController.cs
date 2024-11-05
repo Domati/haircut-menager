@@ -1,4 +1,5 @@
-﻿using HaircutManager.Models;
+﻿using HaircutManager.Migrations;
+using HaircutManager.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -24,11 +25,14 @@ public class UsersController : Controller
     public async Task<IActionResult> Index()
     {
         var users = await _userManager.Users.ToListAsync();
+
+
         var usersViewModel = users.Select(user => new
         {
             user.Id,
             user.Email,
-            Role = _userManager.GetRolesAsync(user).Result.FirstOrDefault()
+            Role = _userManager.GetRolesAsync(user).Result.FirstOrDefault(),
+            IsLockedOut = _userManager.IsLockedOutAsync(user).Result
         }).ToList();
 
         ViewBag.Users = usersViewModel;
@@ -192,5 +196,5 @@ public class UsersController : Controller
 }
 
 
-//Spróbować zmienić default identity na identity.
+
 //Dodane zostały - tworzenie, Edycja hasła użytkowników, usuwanie użytkowników przez Admina
