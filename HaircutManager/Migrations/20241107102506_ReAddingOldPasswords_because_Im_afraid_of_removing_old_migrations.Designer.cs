@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HaircutManager.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241102133130_GenerateUserIdentityAsync-RemovedForTesting")]
-    partial class GenerateUserIdentityAsyncRemovedForTesting
+    [Migration("20241107102506_ReAddingOldPasswords_because_Im_afraid_of_removing_old_migrations")]
+    partial class ReAddingOldPasswords_because_Im_afraid_of_removing_old_migrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
