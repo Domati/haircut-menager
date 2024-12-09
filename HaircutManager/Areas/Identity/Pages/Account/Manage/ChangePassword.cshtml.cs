@@ -6,6 +6,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using HaircutManager.Data;
 using HaircutManager.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -20,15 +21,18 @@ namespace HaircutManager.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<ChangePasswordModel> _logger;
+        private readonly AppDbContext _context;
 
         public ChangePasswordModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            ILogger<ChangePasswordModel> logger)
+            ILogger<ChangePasswordModel> logger,
+            AppDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _context = context;
         }
 
         /// <summary>
@@ -80,23 +84,6 @@ namespace HaircutManager.Areas.Identity.Pages.Account.Manage
             public string ConfirmPassword { get; set; }
         }
 
-        public async Task<IActionResult> OnGetAsync()
-        {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-            }
-
-            var hasPassword = await _userManager.HasPasswordAsync(user);
-            if (!hasPassword)
-            {
-                return RedirectToPage("./SetPassword");
-            }
-
-            return Page();
-        }
-
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -105,14 +92,14 @@ namespace HaircutManager.Areas.Identity.Pages.Account.Manage
             }
 
             var user = await _userManager.Users
-                                        .Include(u => u.PasswordHistory)
-                                        .FirstOrDefaultAsync(u => u.Id == _userManager.GetUserId(User));
+                                         .Include(u => u.PasswordHistory)
+                                         .FirstOrDefaultAsync(u => u.Id == _userManager.GetUserId(User));
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            if(user.PasswordHistory == null)
+            if (user.PasswordHistory == null)
             {
                 user.PasswordHistory = new List<OldPassword>();
             }
@@ -124,21 +111,33 @@ namespace HaircutManager.Areas.Identity.Pages.Account.Manage
                 StatusMessage = "Password already used.";
                 return Page();
             }
-        
+
             var changePasswordResult = await _userManager.ChangePasswordAsync(user, Input.OldPassword, Input.NewPassword);
-            if (changePasswordResult.Succeeded) {
-                var newoldpassword = new OldPassword
+            if (changePasswordResult.Succeeded)
+            {
+                // Zapisujemy nowe hasło do historii
+                var newOldPassword = new OldPassword
                 {
                     id = Guid.NewGuid(),
-                    PasswordHash = user.PasswordHash,
+                    PasswordHash = _userManager.PasswordHasher.HashPassword(user, Input.NewPassword),
                     ChangedAt = DateTime.Now,
                     UserId = user.Id,
                     User = user
                 };
 
-                user.PasswordHistory.Add(newoldpassword);
+                user.PasswordHistory.Add(newOldPassword);
 
                 await _userManager.UpdateAsync(user);
+
+                // Logowanie audytu zmiany hasła
+                await LogAuditAsync(
+                    "ChangePassword",
+                    "User",
+                    user.Id,
+                    null, // Brak starego hasła w audycie
+                    $"Password changed for user '{user.Email}'", // Nowe hasło z informacją o użytkowniku
+                    User.Identity.Name
+                );
             }
             else
             {
@@ -148,16 +147,33 @@ namespace HaircutManager.Areas.Identity.Pages.Account.Manage
                 }
                 return Page();
             }
-           
 
             await _signInManager.RefreshSignInAsync(user);
             _logger.LogInformation("User changed their password successfully.");
             StatusMessage = "Your password has been changed.";
 
-            //remove claim
+            // Remove claim
             await _userManager.RemoveClaimAsync(user, new Claim("NeedPasswordChange", "true"));
 
             return RedirectToPage();
+        }
+
+        private async Task LogAuditAsync(string action, string entity, string entityId, string? oldValue, string newValue, string changedBy)
+        {
+            var audit = new Audit
+            {
+                Action = action,
+                Entity = entity,
+                EntityId = entityId,
+                OldValue = oldValue ?? "",
+                NewValue = newValue,
+                ChangedBy = changedBy,
+                ChangedAt = DateTime.UtcNow
+            };
+
+            // Zapis do bazy danych
+            _context.Audit.Add(audit);
+            await _context.SaveChangesAsync();
         }
     }
 }

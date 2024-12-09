@@ -1,0 +1,35 @@
+﻿@model IEnumerable<HaircutManager.Models.Audit>
+
+@{
+    ViewData["Title"] = "Audit Log";
+}
+
+<h2>Audit Log</h2>
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Action</th>
+            <th>Entity</th>
+            <th>EntityId</th>
+            <th>Old Value</th>
+            <th>New Value</th>
+            <th>Changed By</th>
+            <th>Changed At</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var audit in Model)
+        {
+            <tr>
+                <td>@audit.Action</td>
+                <td>@audit.Entity</td>
+                <td>@audit.EntityId</td>
+                <td>@audit.OldValue</td>
+                <td>@audit.NewValue</td>
+                <td>@audit.ChangedBy</td>
+                <td>@audit.ChangedAt.ToString("yyyy-MM-dd HH:mm:ss")</td>
+            </tr>
+        }
+    </tbody>
+</table>

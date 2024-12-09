@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Projects\\haircut-menager\\HaircutManager\\HaircutManager.csproj": {}
+    "C:\\Users\\Mateusz\\Source\\Repos\\Domati\\haircut-menager\\HaircutManager\\HaircutManager.csproj": {}
   },
   "projects": {
-    "D:\\Projects\\haircut-menager\\HaircutManager\\HaircutManager.csproj": {
+    "C:\\Users\\Mateusz\\Source\\Repos\\Domati\\haircut-menager\\HaircutManager\\HaircutManager.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Projects\\haircut-menager\\HaircutManager\\HaircutManager.csproj",
+        "projectUniqueName": "C:\\Users\\Mateusz\\Source\\Repos\\Domati\\haircut-menager\\HaircutManager\\HaircutManager.csproj",
         "projectName": "HaircutManager",
-        "projectPath": "D:\\Projects\\haircut-menager\\HaircutManager\\HaircutManager.csproj",
-        "packagesPath": "C:\\Users\\mateu\\.nuget\\packages\\",
-        "outputPath": "D:\\Projects\\haircut-menager\\HaircutManager\\obj\\",
+        "projectPath": "C:\\Users\\Mateusz\\Source\\Repos\\Domati\\haircut-menager\\HaircutManager\\HaircutManager.csproj",
+        "packagesPath": "C:\\Users\\Mateusz\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Mateusz\\Source\\Repos\\Domati\\haircut-menager\\HaircutManager\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "D:\\Visual Studio\\VSShared\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\mateu\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Mateusz\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -43,8 +43,9 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "direct"
-        }
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -82,7 +83,7 @@
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
-              "version": "[8.0.6, )"
+              "version": "[8.0.7, )"
             },
             "MySql.Data": {
               "target": "Package",
@@ -120,7 +121,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

@@ -11,7 +11,7 @@ namespace HaircutManager.Data
         {
             
         }
-
+        public DbSet<Audit> Audit { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<ApplicationUser> ApplicationUser { get; set; }

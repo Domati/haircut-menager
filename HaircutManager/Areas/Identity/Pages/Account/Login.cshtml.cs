@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using HaircutManager.Data;
 
 namespace HaircutManager.Areas.Identity.Pages.Account
 {
@@ -22,11 +23,13 @@ namespace HaircutManager.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly AppDbContext _context;
 
-        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger, AppDbContext context)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _context = context;
         }
 
         /// <summary>
@@ -110,37 +113,71 @@ namespace HaircutManager.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                var user = await _signInManager.UserManager.FindByEmailAsync(Input.Email);
+
                 if (result.Succeeded)
                 {
-                    if(User.Claims.Any(c => c.Type == "NeedPasswordChange" && c.Value == "true"))
+                    await LogAuditAsync(
+                        "Login","User",user?.Id ?? "Unknown",string.Empty,$"User {Input.Email} successfully logged in.",user?.Email ?? "Unknown");
+
+                    if (User.Claims.Any(c => c.Type == "NeedPasswordChange" && c.Value == "true"))
                     {
                         _logger.LogInformation("User needs to change password on first login.");
                         return RedirectToPage("./Manage/ChangePassword");
                     }
+
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }
-                if (result.RequiresTwoFactor)
-                {
-                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
-                }
-                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning("User account locked out.");
-                    return RedirectToPage("./Lockout");
-                }
                 else
                 {
+                    var reason = result.IsLockedOut
+                        ? "Account locked out"
+                        : result.RequiresTwoFactor
+                            ? "Requires two-factor authentication"
+                            : "Invalid login attempt";
+
+                    await LogAuditAsync(
+                        "FailedLogin",
+                        "User",user?.Id ?? "Unknown",string.Empty,$"Failed login attempt for user {Input.Email}. Reason: {reason}","System"
+                    );
+
+                    if (result.RequiresTwoFactor)
+                    {
+                        return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
+                    }
+                    if (result.IsLockedOut)
+                    {
+                        _logger.LogWarning("User account locked out.");
+                        return RedirectToPage("./Lockout");
+                    }
+
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return Page();
                 }
             }
 
             // If we got this far, something failed, redisplay form
             return Page();
         }
+
+
+        private async Task LogAuditAsync(string action, string entity, string entityId, string oldValue, string newValue, string changedBy)
+        {
+            var audit = new Audit
+            {
+                Action = action,
+                Entity = entity,
+                EntityId = entityId,
+                OldValue = oldValue,
+                NewValue = newValue,
+                ChangedBy = changedBy,
+                ChangedAt = DateTime.UtcNow
+            };
+
+            _context.Audit.Add(audit);
+            await _context.SaveChangesAsync();
+        }
+
     }
 }

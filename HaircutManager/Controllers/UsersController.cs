@@ -1,9 +1,11 @@
-﻿using HaircutManager.Migrations;
+﻿using HaircutManager.Data;
+using HaircutManager.Migrations;
 using HaircutManager.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SQLitePCL;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -14,18 +16,18 @@ public class UsersController : Controller
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly AppDbContext _context;
 
-    public UsersController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+    public UsersController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, AppDbContext context)
     {
         _userManager = userManager;
         _roleManager = roleManager;
+        _context = context;
     }
-
 
     public async Task<IActionResult> Index()
     {
         var users = await _userManager.Users.ToListAsync();
-
 
         var usersViewModel = users.Select(user => new
         {
@@ -44,6 +46,8 @@ public class UsersController : Controller
     public async Task<IActionResult> Edit(string id, string roleName)
     {
         var user = await _userManager.FindByIdAsync(id);
+        if (user == null) return NotFound();
+
         var currentRole = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
         if (!string.IsNullOrEmpty(currentRole))
         {
@@ -54,14 +58,17 @@ public class UsersController : Controller
             await _userManager.AddToRoleAsync(user, roleName);
         }
 
+        // Zapis audytu edycji użytkownika
+        await LogAuditAsync(
+            "Edit",
+            $"User {user.Email}",
+            user.Id,
+            $"Role: {currentRole}",
+            $"Role: {roleName}",
+            User.Identity.Name
+        );
+
         return RedirectToAction(nameof(Index));
-    }
-    //TWORZENIE NOWYCH UŻYTKOWNIKÓW
-    [HttpGet]
-    public IActionResult Create()
-    {
-        ViewBag.Roles = _roleManager.Roles.ToList();
-        return View(new CreateUserViewModel());
     }
 
     [HttpPost]
@@ -75,10 +82,22 @@ public class UsersController : Controller
 
             if (result.Succeeded)
             {
-                _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("NeedPasswordChange", "true")).Wait();
+                await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("NeedPasswordChange", "true"));
+                if (!string.IsNullOrEmpty(model.RoleName))
                 {
                     await _userManager.AddToRoleAsync(user, model.RoleName);
                 }
+
+                // Zapis audytu utworzenia użytkownika
+                await LogAuditAsync(
+                    "Create",
+                    "User",
+                    user.Id,
+                    null,
+                    $"Email: {model.Email}, Role: {model.RoleName}",
+                    User.Identity.Name
+                );
+
                 return RedirectToAction(nameof(Index));
             }
 
@@ -92,108 +111,67 @@ public class UsersController : Controller
         return View(model);
     }
 
-
-    //zmiana hasła użytkowników
-    // Metoda GET
-    public async Task<IActionResult> ChangePassword(string id)
-    {
-        var user = await _userManager.FindByIdAsync(id);
-        if (user == null)
-        {
-            return NotFound();
-        }
-
-        return View(new ChangePasswordViewModel { UserId = user.Id });
-    }
-
-    // Metoda POST
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
-    {
-        var user = await _userManager.FindByIdAsync(model.UserId);
-        if (user == null)
-        {
-            return NotFound();
-        }
-
-        var isOldPasswordValid = await _userManager.CheckPasswordAsync(user, model.OldPassword);
-        if (!isOldPasswordValid)
-        {
-            ModelState.AddModelError(string.Empty, "Stare hasło jest niepoprawne.");
-            return View(model);
-        }
-
-        if (user.PasswordHistory.Any(u => u.PasswordHash == _userManager.PasswordHasher.HashPassword(user, model.NewPassword)))
-        {
-            ModelState.AddModelError(string.Empty, "Hasło już było użyte.");
-            return View(model);
-        }
-        else {
-
-            var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
-
-            if (result.Succeeded)
-            {
-                if (user.PasswordHistory == null)
-                {
-                    user.PasswordHistory = new List<OldPassword>();
-                }
-
-                user.PasswordHistory.Add(new OldPassword
-                {
-                    PasswordHash = _userManager.PasswordHasher.HashPassword(user, model.NewPassword),
-                    ChangedAt = DateTime.Now
-                });
-
-                await _userManager.UpdateAsync(user);
-
-                return RedirectToAction(nameof(Index));
-            }
-
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
-
-            return View(model);
-        }
-    }
-
-    //USUWANIE UŻYTKOWNIKów
-    public async Task<IActionResult> Delete(string id)
-    {
-        var user = await _userManager.FindByIdAsync(id);
-        if (user != null)
-        {
-            await _userManager.DeleteAsync(user);
-        }
-        return RedirectToAction(nameof(Index));
-    }
-
-    //BLOKOWANIE UŻYTKOWNIKÓW
     public async Task<IActionResult> BanUser(string id)
     {
         var user = await _userManager.FindByIdAsync(id);
         if (user != null)
         {
             await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.MaxValue);
+
+            // Zapis audytu blokady użytkownika
+            await LogAuditAsync(
+                "Ban",
+                "User",
+                user.Id,
+                null,
+                $"User {user.Email} account locked.",
+                User.Identity.Name
+            );
         }
+
         return RedirectToAction(nameof(Index));
     }
 
-    //ODBLOKOWYWANIE UŻYTKOWNIKÓW
     public async Task<IActionResult> UnbanUser(string id)
     {
         var user = await _userManager.FindByIdAsync(id);
         if (user != null)
         {
             await _userManager.SetLockoutEndDateAsync(user, null);
+
+            // Zapis audytu odblokowania użytkownika
+            await LogAuditAsync(
+                "Unban",
+                "User",
+                user.Id,
+                null,
+               $"User {user.Email} account unlocked.",
+                User.Identity.Name
+            );
         }
+
         return RedirectToAction(nameof(Index));
     }
 
+    private async Task LogAuditAsync(string action, string entity, string entityId, string? oldValue, string newValue, string changedBy)
+    {
+        var audit = new Audit
+        {
+            Action = action,
+            Entity = entity,
+            EntityId = entityId,
+            OldValue = oldValue ?? "",
+            NewValue = newValue,
+            ChangedBy = changedBy,
+            ChangedAt = DateTime.UtcNow
+        };
+
+        // Zapis do bazy danych
+        _context.Audit.Add(audit);
+        await _context.SaveChangesAsync();
+    }
 }
+
 
 
 
