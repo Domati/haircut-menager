@@ -2,6 +2,7 @@ using HaircutManager.Data;
 using HaircutManager.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using reCAPTCHA.AspNetCore;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,14 @@ builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
 
 
 builder.Services.Configure<IdentityOptions>(options => options.Password.RequireUppercase = false);
+
+builder.Services.AddRecaptcha(options =>
+{
+    options.SecretKey = builder.Configuration["GoogleReCAPTCHA:SecretKey"];
+    options.SiteKey = builder.Configuration["GoogleReCAPTCHA:SiteKey"];
+});
+builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
+
 
 //MySQL Connection
 var connectionString = builder.Configuration.GetConnectionString("MySQLConn");

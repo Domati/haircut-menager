@@ -19,7 +19,8 @@
           "MySql.Data": "9.1.0",
           "MySqlConnector": "2.3.7",
           "Pomelo.EntityFrameworkCore.MySql": "8.0.2",
-          "fullcalendar": "3.9.0"
+          "fullcalendar": "3.9.0",
+          "reCAPTCHA.AspNetCore": "3.0.10"
         },
         "runtime": {
           "HaircutManager.dll": {}
@@ -1935,6 +1936,14 @@
           }
         }
       },
+      "reCAPTCHA.AspNetCore/3.0.10": {
+        "runtime": {
+          "lib/netcoreapp3.1/reCAPTCHA.AspNetCore.dll": {
+            "assemblyVersion": "3.0.10.0",
+            "fileVersion": "3.0.10.0"
+          }
+        }
+      },
       "SQLitePCLRaw.bundle_e_sqlite3/2.1.6": {
         "dependencies": {
           "SQLitePCLRaw.lib.e_sqlite3": "2.1.6",
@@ -3387,6 +3396,13 @@
       "sha512": "sha512-XjnlcxVBLnEMbyEc5cZzgZeDyLvAniACZQ04W1slWN0f4rmfNzl98gEMvHnFH0fMDF06z9MmgGi/Sr7hJ+BVnw==",
       "path": "pomelo.entityframeworkcore.mysql/8.0.2",
       "hashPath": "pomelo.entityframeworkcore.mysql.8.0.2.nupkg.sha512"
+    },
+    "reCAPTCHA.AspNetCore/3.0.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-MJ3MCMBWr4gd+JZBXyUyT+YOdnMTNlysRrWKne/B/4hSxrpqERxinenvup6hVkQAoPz0DXzzJDujROEQPwohow==",
+      "path": "recaptcha.aspnetcore/3.0.10",
+      "hashPath": "recaptcha.aspnetcore.3.0.10.nupkg.sha512"
     },
     "SQLitePCLRaw.bundle_e_sqlite3/2.1.6": {
       "type": "package",

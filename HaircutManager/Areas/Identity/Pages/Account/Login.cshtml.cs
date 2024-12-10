@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using HaircutManager.Data;
+using reCAPTCHA.AspNetCore;
 
 namespace HaircutManager.Areas.Identity.Pages.Account
 {
@@ -24,12 +25,16 @@ namespace HaircutManager.Areas.Identity.Pages.Account
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
         private readonly AppDbContext _context;
+        private readonly IRecaptchaService _recaptcha;
+        private readonly IConfiguration _configuration;
 
-        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger, AppDbContext context)
+        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger, AppDbContext context, IRecaptchaService recaptcha, IConfiguration configuration)
         {
             _signInManager = signInManager;
             _logger = logger;
             _context = context;
+            _recaptcha = recaptcha;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -101,7 +106,7 @@ namespace HaircutManager.Areas.Identity.Pages.Account
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-
+            ViewData["RecaptchaSiteKey"] = _configuration["GoogleReCAPTCHA:SiteKey"];
             ReturnUrl = returnUrl;
         }
 
@@ -113,6 +118,14 @@ namespace HaircutManager.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
+
+                var recaptchaResult = await _recaptcha.Validate(Request);
+                if (!recaptchaResult.success)
+                {
+                    ModelState.AddModelError(string.Empty, "Please verify that you are not a robot.");
+                    return Page();
+                }
+
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 var user = await _signInManager.UserManager.FindByEmailAsync(Input.Email);
 

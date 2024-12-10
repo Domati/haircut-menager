@@ -1791,3 +1791,4 @@ C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\ne
 C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\obj\Debug\net8.0\staticwebassets.build.endpoints.json
 C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\obj\Debug\net8.0\staticwebassets\msbuild.HaircutManager.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
 C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+C:\Users\Mateusz\Source\Repos\Domati\haircut-menager\HaircutManager\bin\Debug\net8.0\reCAPTCHA.AspNetCore.dll
