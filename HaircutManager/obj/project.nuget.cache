@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "n4qHW1W7Too=",
+  "dgSpecHash": "4yGlCfvbM4s=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Mateusz\\Source\\Repos\\Domati\\haircut-menager\\HaircutManager\\HaircutManager.csproj",
+  "projectFilePath": "C:\\Users\\Mateusz\\Source\\Repos\\haircut-menager\\HaircutManager\\HaircutManager.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Mateusz\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\Mateusz\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",
