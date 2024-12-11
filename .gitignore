@@ -6,3 +6,4 @@
 appsettings.json
 appsettings.*.json
 
+/HaircutManager/bin/Debug/net8.0
