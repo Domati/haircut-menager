@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.Security.Claims;
 
 namespace HaircutManager.Areas.Identity.Pages.Account
 {
@@ -172,7 +173,12 @@ namespace HaircutManager.Areas.Identity.Pages.Account
                         }
                     };
 
-                    await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("NeedPasswordChange", "true"));
+                    user.OneTimePasswords = new List<OtpInstance>(){
+                        OtpHelper.GenerateOtpClaim(OtpType.Random12)
+                    };
+
+                    await _userManager.AddClaimAsync(user, new Claim("OtpClaim", OtpHelper.GetTypeName(OtpType.Random12)));
+                    await _userManager.AddClaimAsync(user, new Claim("NeedPasswordChange", "true"));
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

@@ -39,11 +39,12 @@ public class UsersController : Controller
 
         ViewBag.Users = usersViewModel;
         ViewBag.Roles = _roleManager.Roles.ToList();
+        ViewBag.OtpTypes = OtpHelper.GetOtpTypes();
 
         return View();
     }
 
-    public async Task<IActionResult> Edit(string id, string roleName)
+    public async Task<IActionResult> EditRole(string id, string roleName)
     {
         var user = await _userManager.FindByIdAsync(id);
         if (user == null) return NotFound();
@@ -71,6 +72,34 @@ public class UsersController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    public async Task<IActionResult> AssignOtp(string id, int type)
+    {
+
+        var user = await _userManager.Users
+                                        .Include(u => u.OneTimePasswords)
+                                        .FirstOrDefaultAsync(u => u.Id == id);
+
+        if (user != null)
+        {
+            user.OneTimePasswords.Add(OtpHelper.GenerateOtpClaim((OtpType)type));
+            await _userManager.UpdateAsync(user);
+
+            await _userManager.AddClaimAsync(user, new Claim("OtpClaim", OtpHelper.GetTypeName((OtpType)type)));
+
+            // Zapis audytu generowania OTP
+            await LogAuditAsync(
+                "Generate",
+                "OTP",
+                user.Id,
+                null,
+                $"OTP generated for user {user.Email}. Type: {type}",
+                "Admin"
+            );
+        }
+
+        return RedirectToAction(nameof(Index));
+    }
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(CreateUserViewModel model)
@@ -82,7 +111,9 @@ public class UsersController : Controller
 
             if (result.Succeeded)
             {
-                await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("NeedPasswordChange", "true"));
+                user.OneTimePasswords.Add(OtpHelper.GenerateOtpClaim(OtpType.Random12));
+                await _userManager.AddClaimAsync(user, new Claim("OtpClaim", OtpHelper.GetTypeName(OtpType.Random12)));
+                await _userManager.AddClaimAsync(user, new Claim("NeedPasswordChange", "true"));
                 if (!string.IsNullOrEmpty(model.RoleName))
                 {
                     await _userManager.AddToRoleAsync(user, model.RoleName);

@@ -88,8 +88,11 @@ namespace HaircutManager.Areas.Identity.Pages.Account
             }
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(string code, string email)
         {
+            Input.Email = email;
+            Input.Code = code;
+
             if (!ModelState.IsValid)
             {
                 return Page();

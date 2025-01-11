@@ -4,6 +4,7 @@ using HaircutManager.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HaircutManager.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250111191316_Modified-EF-OTP-to-generate-id-on-creation")]
+    partial class ModifiedEFOTPtogenerateidoncreation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -176,6 +179,9 @@ namespace HaircutManager.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("id"));
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(255)");
+
                     b.Property<string>("Answer")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -192,15 +198,12 @@ namespace HaircutManager.Migrations
                     b.Property<double>("ParameterB")
                         .HasColumnType("double");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
+                    b.HasKey("id", "UserId");
 
-                    b.HasKey("id");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("OneTimePasswords");
+                    b.ToTable("Otp");
                 });
 
             modelBuilder.Entity("HaircutManager.Models.Reservation", b =>
@@ -455,8 +458,8 @@ namespace HaircutManager.Migrations
             modelBuilder.Entity("HaircutManager.Models.OtpInstance", b =>
                 {
                     b.HasOne("HaircutManager.Models.ApplicationUser", "User")
-                        .WithMany("OneTimePasswords")
-                        .HasForeignKey("UserId")
+                        .WithOne("Otp")
+                        .HasForeignKey("HaircutManager.Models.OtpInstance", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -527,7 +530,8 @@ namespace HaircutManager.Migrations
 
             modelBuilder.Entity("HaircutManager.Models.ApplicationUser", b =>
                 {
-                    b.Navigation("OneTimePasswords");
+                    b.Navigation("Otp")
+                        .IsRequired();
 
                     b.Navigation("PasswordHistory");
                 });

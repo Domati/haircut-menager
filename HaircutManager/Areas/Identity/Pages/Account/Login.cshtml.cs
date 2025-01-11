@@ -23,14 +23,16 @@ namespace HaircutManager.Areas.Identity.Pages.Account
     public class LoginModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<LoginModel> _logger;
         private readonly AppDbContext _context;
         private readonly IRecaptchaService _recaptcha;
         private readonly IConfiguration _configuration;
 
-        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger, AppDbContext context, IRecaptchaService recaptcha, IConfiguration configuration)
+        public LoginModel(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, ILogger<LoginModel> logger, AppDbContext context, IRecaptchaService recaptcha, IConfiguration configuration)
         {
             _signInManager = signInManager;
+            _userManager = userManager;
             _logger = logger;
             _context = context;
             _recaptcha = recaptcha;
@@ -106,7 +108,7 @@ namespace HaircutManager.Areas.Identity.Pages.Account
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-            ViewData["RecaptchaSiteKey"] = _configuration["GoogleReCAPTCHA:SiteKey"];
+            ViewData["RecaptchaSiteKey"] = _configuration["ApiKeys:GoogleReCAPTCHA:SiteKey"];
             ReturnUrl = returnUrl;
         }
 
@@ -126,8 +128,18 @@ namespace HaircutManager.Areas.Identity.Pages.Account
                     return Page();
                 }
 
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 var user = await _signInManager.UserManager.FindByEmailAsync(Input.Email);
+
+                var otpClaimExist = _userManager.GetClaimsAsync(user).Result.Any(c => c.Type == "OtpClaim");
+
+                //var otpClaim = User.Claims.Any(c => c.Type == "OtpClaim");
+
+                if (otpClaimExist == true)
+                {
+                    return RedirectToPage("./LoginWithOtp", new { ReturnUrl = returnUrl, email = Input.Email });
+                }
+
+                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
 
                 if (result.Succeeded)
                 {
@@ -138,6 +150,14 @@ namespace HaircutManager.Areas.Identity.Pages.Account
                     {
                         _logger.LogInformation("User needs to change password on first login.");
                         return RedirectToPage("./Manage/ChangePassword");
+                    }
+
+                    if (user is not null)
+                    {
+                        user.FailedLoginAttempts = 0;
+
+                        user.LastActivity = DateTime.UtcNow;
+                        await _userManager.UpdateAsync(user);
                     }
 
                     _logger.LogInformation("User logged in.");
@@ -153,7 +173,11 @@ namespace HaircutManager.Areas.Identity.Pages.Account
 
                     await LogAuditAsync(
                         "FailedLogin",
-                        "User",user?.Id ?? "Unknown",string.Empty,$"Failed login attempt for user {Input.Email}. Reason: {reason}","System"
+                        "User",
+                        user?.Id ?? "Unknown",
+                        string.Empty,
+                        $"Failed login attempt for user {Input.Email}. Reason: {reason}",
+                        "System"
                     );
 
                     if (result.RequiresTwoFactor)
@@ -166,6 +190,24 @@ namespace HaircutManager.Areas.Identity.Pages.Account
                         return RedirectToPage("./Lockout");
                     }
 
+                    if (user is not null)
+                    {
+                        user.FailedLoginAttempts++;
+                        await _userManager.UpdateAsync(user);
+
+                        if (user.FailedLoginAttempts >= 3)
+                        {
+                            await _signInManager.UserManager.SetLockoutEndDateAsync(user, DateTimeOffset.UtcNow.AddMinutes(10));
+                            await LogAuditAsync(
+                                "Lockout",
+                                "User",
+                                user.Id,
+                                string.Empty,
+                                $"User {Input.Email} account locked. Reason: more than 3 incorrect login attempts",
+                                "System"
+                            );
+                        }
+                    }
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                 }
             }

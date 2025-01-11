@@ -8,7 +8,9 @@
         <tr>
             <th>Email</th>
             <th>Rola</th>
-            <th>Akcje</th>
+            <th>Akcje:Role</th>
+            <th>Akcje:Administracja</th>
+            <th>Akcje:OTP</th>
         </tr>
     </thead>
     <tbody>
@@ -21,9 +23,10 @@
                     <!-- Edytowanie roli użytkownika -->
                     @foreach (var role in ViewBag.Roles as IEnumerable<IdentityRole>)
                     {
-                        <a asp-action="Edit" asp-route-id="@user.Id" asp-route-roleName="@role.Name" class="btn btn-primary btn-sm">@role.Name</a>
+                        <a asp-action="EditRole" asp-route-id="@user.Id" asp-route-roleName="@role.Name" class="btn btn-primary btn-sm">@role.Name</a>
                     }
-
+                </td>
+                <td>
                     <!-- Przycisk do usuwania użytkownika -->
                     <form asp-action="Delete" asp-route-id="@user.Id" method="post" style="display:inline;">
                         <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Czy na pewno chcesz usunąć tego użytkownika?')">Usuń</button>
@@ -33,17 +36,61 @@
                     @if (user.IsLockedOut)
                     {
                         <form asp-action="UnbanUser" asp-route-id="@user.Id" method="post" style="display:inline;">
-                            <button type="submit" class="btn btn-success btn-sm">Odblokuj</button>
+                            <button type="submit" class="btn btn-success btn-sm">Odblokuj Użytkownika</button>
                         </form>
                     }
                     else
                     {
                         <form asp-action="BanUser" asp-route-id="@user.Id" method="post" style="display:inline;">
-                            <button type="submit" class="btn btn-warning btn-sm">Zablokuj</button>
+                            <button type="submit" class="btn btn-warning btn-sm">Zablokuj Użytkownika</button>
                         </form>
                     }
+                </td>
+                <td>
+                    <button type="button" class="btn btn-info btn-sm" onclick="showOtpModal('@user.Id')">Przypisz OTP</button>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+<!-- Modal for OTP assignment -->
+<div class="modal fade" id="otpModal" tabindex="-1" role="dialog" aria-labelledby="otpModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="otpModalLabel">Przypisz OTP</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form asp-action="AssignOtp" method="post">
+                <input type="hidden" name="id" id="userId" />
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="otpType">Typ OTP:</label>
+                        <select class="form-control" name="type" id="otpType">
+                            @foreach (var otpType in ViewBag.OtpTypes)
+                            {
+                                <option value="@((int)otpType)">@otpType.ToString()</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                    <button type="submit" class="btn btn-primary">Zapisz</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+	<script>
+		function showOtpModal(userId) {
+			$('#userId').val(userId);
+			$('#otpModal').modal('show');
+		}
+	</script>
+}

@@ -1,5 +1,7 @@
 using HaircutManager.Data;
+using HaircutManager.Middleware;
 using HaircutManager.Models;
+using HaircutManager.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using reCAPTCHA.AspNetCore;
@@ -19,11 +21,11 @@ builder.Services.Configure<IdentityOptions>(options => options.Password.RequireU
 
 builder.Services.AddRecaptcha(options =>
 {
-    options.SecretKey = builder.Configuration["GoogleReCAPTCHA:SecretKey"];
-    options.SiteKey = builder.Configuration["GoogleReCAPTCHA:SiteKey"];
+    options.SecretKey = builder.Configuration["ApiKeys:GoogleReCAPTCHA:SecretKey"];
+    options.SiteKey = builder.Configuration["ApiKeys:GoogleReCAPTCHA:SiteKey"];
 });
-builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
+builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
 //MySQL Connection
 var connectionString = builder.Configuration.GetConnectionString("MySQLConn");
@@ -44,14 +46,20 @@ builder.Services
         options.Password.RequireUppercase = false;
     })
     .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<AppDbContext>();
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
 
-
+//this doesn't work, problem with scope. Commented out for now
+//builder.Services.AddHostedService<InactivityMonitorService>();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if(app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+else
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
@@ -63,6 +71,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+//app.UseMiddleware<ActivityTrackerMiddleware>();
 
 app.MapControllerRoute(
     name: "default",

@@ -12,6 +12,7 @@ namespace HaircutManager.Data
             
         }
         public DbSet<Audit> Audit { get; set; }
+        public DbSet<OtpInstance> OneTimePasswords { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
@@ -37,6 +38,18 @@ namespace HaircutManager.Data
                 .HasOne(op => op.User)
                 .WithMany(u => u.PasswordHistory)
                 .HasForeignKey(op => op.UserId);
+
+            modelBuilder.Entity<OtpInstance>().
+                HasKey(oi => new {oi.id});
+
+            modelBuilder.Entity<OtpInstance>().
+                Property(oi => oi.id).
+                ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<OtpInstance>().
+                HasOne(oi => oi.User).
+                WithMany(u => u.OneTimePasswords).
+                HasForeignKey(oi => oi.UserId);
         }
 
     

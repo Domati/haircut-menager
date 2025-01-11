@@ -4,6 +4,7 @@ using HaircutManager.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HaircutManager.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250110200948_Modfied-User-for-OTP-and-Inactivity-Tracker-and-Failed-Logins")]
+    partial class ModfiedUserforOTPandInactivityTrackerandFailedLogins
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -166,41 +169,6 @@ namespace HaircutManager.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("OldPasswords");
-                });
-
-            modelBuilder.Entity("HaircutManager.Models.OtpInstance", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<string>("Answer")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("IsUsed")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<int>("OtpType")
-                        .HasColumnType("int");
-
-                    b.Property<double>("ParameterA")
-                        .HasColumnType("double");
-
-                    b.Property<double>("ParameterB")
-                        .HasColumnType("double");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("OneTimePasswords");
                 });
 
             modelBuilder.Entity("HaircutManager.Models.Reservation", b =>
@@ -452,17 +420,6 @@ namespace HaircutManager.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("HaircutManager.Models.OtpInstance", b =>
-                {
-                    b.HasOne("HaircutManager.Models.ApplicationUser", "User")
-                        .WithMany("OneTimePasswords")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("HaircutManager.Models.Reservation", b =>
                 {
                     b.HasOne("HaircutManager.Models.Service", "Service")
@@ -527,8 +484,6 @@ namespace HaircutManager.Migrations
 
             modelBuilder.Entity("HaircutManager.Models.ApplicationUser", b =>
                 {
-                    b.Navigation("OneTimePasswords");
-
                     b.Navigation("PasswordHistory");
                 });
 
