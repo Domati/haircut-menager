@@ -12,16 +12,21 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using reCAPTCHA.AspNetCore;
 
 namespace HaircutManager.Areas.Identity.Pages.Account
 {
     public class ResetPasswordModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IRecaptchaService _recaptcha;
+        private readonly IConfiguration _configuration;
 
-        public ResetPasswordModel(UserManager<ApplicationUser> userManager)
+        public ResetPasswordModel(UserManager<ApplicationUser> userManager, IRecaptchaService recaptcha, IConfiguration configuration)
         {
             _userManager = userManager;
+            _recaptcha = recaptcha;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -74,6 +79,9 @@ namespace HaircutManager.Areas.Identity.Pages.Account
 
         public IActionResult OnGet(string code = null)
         {
+
+            ViewData["RecaptchaSiteKey"] = _configuration["ApiKeys:GoogleReCAPTCHA:SiteKey"];
+
             if (code == null)
             {
                 return BadRequest("A code must be supplied for password reset.");
@@ -92,6 +100,13 @@ namespace HaircutManager.Areas.Identity.Pages.Account
         {
             Input.Email = email;
             Input.Code = code;
+
+            var recaptchaResult = await _recaptcha.Validate(Request);
+            if (!recaptchaResult.success)
+            {
+                ModelState.AddModelError(string.Empty, "Please verify that you are not a robot.");
+                return Page();
+            }
 
             if (!ModelState.IsValid)
             {

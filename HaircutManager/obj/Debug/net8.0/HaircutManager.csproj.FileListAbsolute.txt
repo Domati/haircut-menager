@@ -2107,3 +2107,4 @@ C:\_STUDIA\CyberSec\haricut-menager\HaircutManager\obj\Debug\net8.0\refint\Hairc
 C:\_STUDIA\CyberSec\haricut-menager\HaircutManager\obj\Debug\net8.0\HaircutManager.pdb
 C:\_STUDIA\CyberSec\haricut-menager\HaircutManager\obj\Debug\net8.0\HaircutManager.genruntimeconfig.cache
 C:\_STUDIA\CyberSec\haricut-menager\HaircutManager\obj\Debug\net8.0\ref\HaircutManager.dll
+D:\Projects\haircut-menager\HaircutManager\bin\Debug\net8.0\reCAPTCHA.AspNetCore.dll

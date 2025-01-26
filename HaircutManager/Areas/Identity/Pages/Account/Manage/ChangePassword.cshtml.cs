@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using reCAPTCHA.AspNetCore;
 
 namespace HaircutManager.Areas.Identity.Pages.Account.Manage
 {
@@ -22,17 +23,21 @@ namespace HaircutManager.Areas.Identity.Pages.Account.Manage
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<ChangePasswordModel> _logger;
         private readonly AppDbContext _context;
+        private readonly IRecaptchaService _recaptcha;
+        private readonly IConfiguration _configuration;
 
         public ChangePasswordModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<ChangePasswordModel> logger,
-            AppDbContext context)
+            AppDbContext context, IRecaptchaService recaptcha, IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _context = context;
+            _recaptcha = recaptcha;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -84,11 +89,25 @@ namespace HaircutManager.Areas.Identity.Pages.Account.Manage
             public string ConfirmPassword { get; set; }
         }
 
+        public async Task OnGetAsync(string returnUrl = null)
+        {
+            ViewData["RecaptchaSiteKey"] = _configuration["ApiKeys:GoogleReCAPTCHA:SiteKey"];
+
+
+        }
+
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
-                return Page();
+
+
+                var recaptchaResult = await _recaptcha.Validate(Request);
+                if (!recaptchaResult.success)
+                {
+                    ModelState.AddModelError(string.Empty, "Please verify that you are not a robot.");
+                    return Page();
+                }
             }
 
             var user = await _userManager.Users
