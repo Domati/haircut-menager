@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Projects\\haircut-menager\\HaircutManager\\HaircutManager.csproj": {}
+    "C:\\_STUDIA\\CyberSec\\haricut-menager\\HaircutManager\\HaircutManager.csproj": {}
   },
   "projects": {
-    "D:\\Projects\\haircut-menager\\HaircutManager\\HaircutManager.csproj": {
+    "C:\\_STUDIA\\CyberSec\\haricut-menager\\HaircutManager\\HaircutManager.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Projects\\haircut-menager\\HaircutManager\\HaircutManager.csproj",
+        "projectUniqueName": "C:\\_STUDIA\\CyberSec\\haricut-menager\\HaircutManager\\HaircutManager.csproj",
         "projectName": "HaircutManager",
-        "projectPath": "D:\\Projects\\haircut-menager\\HaircutManager\\HaircutManager.csproj",
-        "packagesPath": "C:\\Users\\mateu\\.nuget\\packages\\",
-        "outputPath": "D:\\Projects\\haircut-menager\\HaircutManager\\obj\\",
+        "projectPath": "C:\\_STUDIA\\CyberSec\\haricut-menager\\HaircutManager\\HaircutManager.csproj",
+        "packagesPath": "C:\\Users\\pi0tr\\.nuget\\packages\\",
+        "outputPath": "C:\\_STUDIA\\CyberSec\\haricut-menager\\HaircutManager\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "D:\\Visual Studio\\VSShared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\mateu\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\pi0tr\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -96,6 +92,10 @@
               "target": "Package",
               "version": "[8.0.2, )"
             },
+            "System.Drawing.Common": {
+              "target": "Package",
+              "version": "[9.0.1, )"
+            },
             "fullcalendar": {
               "target": "Package",
               "version": "[3.9.0, )"
@@ -124,7 +124,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

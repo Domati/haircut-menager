@@ -28,8 +28,9 @@ namespace HaircutManager.Areas.Identity.Pages.Account
         private readonly AppDbContext _context;
         private readonly IRecaptchaService _recaptcha;
         private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public LoginModel(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, ILogger<LoginModel> logger, AppDbContext context, IRecaptchaService recaptcha, IConfiguration configuration)
+        public LoginModel(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, ILogger<LoginModel> logger, AppDbContext context, IRecaptchaService recaptcha, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -37,6 +38,7 @@ namespace HaircutManager.Areas.Identity.Pages.Account
             _context = context;
             _recaptcha = recaptcha;
             _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         /// <summary>
@@ -56,6 +58,9 @@ namespace HaircutManager.Areas.Identity.Pages.Account
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
+        
+        public string CaptchaImageUrl { get; private set; }
+
         public string ReturnUrl { get; set; }
 
         /// <summary>
@@ -69,6 +74,7 @@ namespace HaircutManager.Areas.Identity.Pages.Account
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
+
         public class InputModel
         {
             /// <summary>
@@ -93,10 +99,19 @@ namespace HaircutManager.Areas.Identity.Pages.Account
             /// </summary>
             [Display(Name = "Remember me?")]
             public bool RememberMe { get; set; }
+
+            // captcha string
+            [Required]
+            [Display(Name = "Captcha")]
+            [StringLength(4, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 4)]
+            public string CaptchaCode { get; set; }
+
         }
 
         public async Task OnGetAsync(string returnUrl = null)
         {
+            var context = _httpContextAccessor.HttpContext;
+
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
                 ModelState.AddModelError(string.Empty, ErrorMessage);
@@ -105,15 +120,18 @@ namespace HaircutManager.Areas.Identity.Pages.Account
             returnUrl ??= Url.Content("~/");
 
             // Clear the existing external cookie to ensure a clean login process
-            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+            await context.SignOutAsync(IdentityConstants.ExternalScheme);
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-            ViewData["RecaptchaSiteKey"] = _configuration["ApiKeys:GoogleReCAPTCHA:SiteKey"];
             ReturnUrl = returnUrl;
+
+
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            var context = _httpContextAccessor.HttpContext;
+
             returnUrl ??= Url.Content("~/");
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -121,10 +139,9 @@ namespace HaircutManager.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
 
-                var recaptchaResult = await _recaptcha.Validate(Request);
-                if (!recaptchaResult.success)
+                if(!Captcha.ValidateCaptchaCode(Input.CaptchaCode, context))
                 {
-                    ModelState.AddModelError(string.Empty, "Please verify that you are not a robot.");
+                    ModelState.AddModelError(string.Empty, "Invalid captcha code.");
                     return Page();
                 }
 

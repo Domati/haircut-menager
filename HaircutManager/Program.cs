@@ -14,6 +14,14 @@ builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
 
 
@@ -71,6 +79,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseSession();
 
 //app.UseMiddleware<ActivityTrackerMiddleware>();
 
